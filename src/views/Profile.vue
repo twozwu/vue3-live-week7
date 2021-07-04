@@ -1,113 +1,209 @@
 <template>
+  <loading :active="isLoading"></loading>
   <div class="mt-3">
-    <h3 class="mt-6 mb-4 px-3 border-start border-5 border-chocolate">商品列表</h3>
-    <div class="row">
-      <div class="col-md-8">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col" class="border-0 ps-0">Lorem ipsum</th>
-              <th scope="col" class="border-0">Lorem ipsum</th>
-              <th scope="col" class="border-0">Lorem ipsum</th>
-              <th scope="col" class="border-0"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-bottom border-top">
-              <th scope="row" class="border-0 px-0 font-weight-normal py-4">
-                <img
-                  src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80"
-                  alt=""
-                  style="width: 72px; height: 72px; object-fit: cover;"
-                />
-                <p class="mb-0 fw-bold ms-3 d-inline-block">Lorem ipsum</p>
-              </th>
-              <td class="border-0 align-middle" style="max-width: 160px;">
-                <div class="input-group pe-5">
-                  <div class="input-group-prepend">
-                    <button
-                      class="btn btn-outline-dark border-0 py-2"
-                      type="button"
-                      id="button-addon1"
-                    >
-                      <font-awesome-icon icon="minus" class="fas fa-minus"></font-awesome-icon>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    class="form-control border-0 text-center my-auto shadow-none"
-                    placeholder=""
-                    aria-label="Example text with button addon"
-                    aria-describedby="button-addon1"
-                    value="1"
-                  />
-                  <div class="input-group-append">
-                    <button
-                      class="btn btn-outline-dark border-0 py-2"
-                      type="button"
-                      id="button-addon2"
-                    >
-                      <font-awesome-icon icon="plus" class="fas fa-plus"></font-awesome-icon>
-                    </button>
-                  </div>
-                </div>
-              </td>
-              <td class="border-0 align-middle"><p class="mb-0 ms-auto">NT$12,000</p></td>
-              <td class="border-0 align-middle">
-                <font-awesome-icon icon="times" class="fas fa-times"></font-awesome-icon>
-              </td>
-            </tr>
-            <tr class="">
-              <th scope="row" class="border-0 px-0 font-weight-normal py-4"></th>
-              <td class="border-0 align-middle text-end" style="max-width: 160px;">總額：</td>
-              <td class="border-0 align-middle"></td>
-              <td class="border-0 align-middle"></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="input-group w-50 mb-3">
-          <input
-            type="text"
-            class="form-control rounded-0 border-bottom border-top-0
-              border-start-0 border-end-0 shadow-none"
-            placeholder="Coupon Code"
-            aria-label="Recipient's username"
-            aria-describedby="button-addon2"
-          />
-          <div class="input-group-append">
-            <button
-              class="btn btn-outline-dark border-bottom border-top-0
-                border-start-0 border-end-0 rounded-0"
-              type="button"
-              id="button-addon2"
+    <h3 class="mt-6 mb-4 mx-md-6 px-3 border-start border-5 border-chocolate">填寫資料</h3>
+    <div class="row px-md-6">
+      <div class="col-md-7">
+        <Form ref="form" v-slot="{ errors }" @submit="createOrder">
+          <p class="">請輸入聯絡資訊：</p>
+          <div class="mb-0">
+            <label for="ContactMail" class="text-muted mb-0"
+              >信箱<span class="text-danger"> *</span></label
             >
-              <font-awesome-icon icon="paper-plane" class="fas fa-paper-plane"></font-awesome-icon>
+            <Field
+              id="email"
+              name="email"
+              type="email"
+              class="form-control fw-light"
+              :class="{ 'is-invalid': errors['email'], 'is-valid': form.user.email }"
+              placeholder="請輸入 Email"
+              rules="email|required"
+              v-model="form.user.email"
+            ></Field>
+            <ErrorMessage name="email" class="invalid-feedback"></ErrorMessage>
+          </div>
+          <p class="mt-5">請輸入寄送資訊：</p>
+          <div class="mb-2">
+            <label for="ContactName" class="text-muted mb-0"
+              >姓名<span class="text-danger"> *</span></label
+            >
+            <Field
+              id="name"
+              name="姓名"
+              type="text"
+              class="form-control fw-light"
+              :class="{ 'is-invalid': errors['姓名'], 'is-valid': form.user.name }"
+              placeholder="請輸入姓名"
+              rules="required"
+              v-model="form.user.name"
+            ></Field>
+            <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
+          </div>
+          <div class="mb-2">
+            <label for="ContactPhone" class="text-muted mb-0"
+              >連絡電話<span class="text-danger"> *</span></label
+            >
+            <Field
+              id="tel"
+              name="電話"
+              type="tel"
+              class="form-control fw-light"
+              :class="{ 'is-invalid': errors['電話'], 'is-valid': form.user.tel }"
+              placeholder="請輸入電話"
+              rules="required|min:8|max:10"
+              v-model="form.user.tel"
+            ></Field>
+            <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
+          </div>
+          <div class="mb-2">
+            <label for="ContactPhone" class="text-muted mb-0"
+              >連絡地址<span class="text-danger"> *</span></label
+            >
+            <Field
+              id="address"
+              name="地址"
+              type="text"
+              class="form-control fw-light"
+              :class="{ 'is-invalid': errors['地址'], 'is-valid': form.user.address }"
+              placeholder="請輸入地址"
+              rules="required"
+              v-model="form.user.address"
+            ></Field>
+            <ErrorMessage name="地址" class="invalid-feedback"></ErrorMessage>
+          </div>
+          <div class="mb-2">
+            <label for="ContactMessage" class="text-muted mb-0">意見回覆</label>
+            <textarea
+              class="form-control fw-light"
+              rows="6"
+              id="ContactMessage"
+              placeholder="message ... "
+              v-model="form.message"
+            ></textarea>
+          </div>
+          <div class="d-flex mt-4 justify-content-between align-items-end">
+            <a href="#/cart" class="text-dark mt-md-0 mt-3 align-self-center"
+              ><font-awesome-icon
+                icon="chevron-left"
+                class="fas fa-chevron-left me-2"
+              ></font-awesome-icon>
+              回到上一步</a
+            >
+            <button
+              type="submit"
+              class="btn btn-chocolight py-2 px-5"
+              :disabled="Object.keys(errors).length || !checkData"
+            >
+              送出訂單
             </button>
           </div>
-        </div>
+        </Form>
       </div>
-      <div class="col-md-4">
-        <div class="border p-4 mb-4">
-          <h4 class="fw-bold mb-4">Order Detail</h4>
-          <table class="table text-muted border-bottom">
+      <div class="col-md-5">
+        <div class="border p-4 mb-4 mt-md-0 mt-6">
+          <h4 class=" mb-4">我的訂單</h4>
+          <div class="d-flex mb-2" v-for="item in carts.carts" :key="item.id">
+            <img
+              :src="item.product.imageUrl"
+              :alt="item.product.title"
+              class="me-2"
+              style="width: 48px; height: 48px; object-fit: cover"
+            />
+            <div class="w-100">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 fw-bold">{{ item.product.title }}</p>
+                <p class="mb-0">NT${{ $filter.currency(item.product.price) }}</p>
+              </div>
+              <p class="mb-0 fw-normal">x{{ item.qty + item.product.unit }}</p>
+            </div>
+          </div>
+          <table class="table text-muted border-top border-bottom mt-4">
             <tbody>
               <tr>
-                <th scope="row" class="border-0 px-0 pt-4 font-weight-normal">Subtotal</th>
-                <td class="text-end border-0 px-0 pt-4">NT$24,000</td>
+                <th scope="row" class="border-0 px-0 pt-4 font-weight-normal">原價</th>
+                <td class="text-end border-0 px-0 pt-4">NT${{ $filter.currency(carts.total) }}</td>
               </tr>
               <tr>
-                <th scope="row" class="border-0 px-0 pt-0 pb-4 font-weight-normal">Payment</th>
+                <th scope="row" class="border-0 px-0 pt-0 pb-4 font-weight-normal">付款方式</th>
                 <td class="text-end border-0 px-0 pt-0 pb-4">ApplePay</td>
               </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-between mt-4">
-            <p class="mb-0 h4 fw-bold">Total</p>
-            <p class="mb-0 h4 fw-bold">NT$24,000</p>
+            <p class="mb-0 h4 fw-bold">總計</p>
+            <p class="mb-0 h4 fw-bold">NT${{ $filter.currency(carts.final_total) }}</p>
           </div>
-          <a href="./checkout.html" class="btn btn-dark w-100 mt-4">Lorem ipsum</a>
+          <a href="#/products" class="btn btn-outline-chocolight w-100 mt-4">繼續購物</a>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped></style>
+
+<script>
+import Loading from '@/components/Loading.vue';
+
+export default {
+  components: { Loading },
+  data() {
+    return {
+      apiUrl: process.env.VUE_APP_API,
+      apiPath: process.env.VUE_APP_PATH,
+      carts: {},
+      qty: 1,
+      loadingStatus: '',
+      isLoading: false,
+      form: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: '',
+        },
+        message: '',
+      },
+    };
+  },
+  methods: {
+    createOrder() {
+      this.isLoading = true;
+      const url = `${this.apiUrl}/api/${this.apiPath}/order`;
+      const order = this.form;
+      this.axios
+        .post(url, { data: order })
+        .then((response) => {
+          if (response.data.success) {
+            // this.$refs.form.resetForm();
+            this.isLoading = false;
+            this.emitter.emit('navGetCart');
+            this.$httpToastMessage(response, '訂單送出');
+            this.$router.push(`/cart/order/${response.data.orderId}`);
+          } else {
+            console.log(response.data.message);
+            this.$httpToastMessage(response, response.data.message);
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+  },
+  created() {
+    this.emitter.on('cartBus', (carts) => {
+      if (carts) {
+        this.carts = carts;
+      }
+    });
+  },
+  mounted() {
+    this.emitter.emit('navSendData');
+    this.emitter.emit('toProgress', 50);
+  },
+  computed: {
+    checkData() {
+      const attrs = ['name', 'email', 'tel', 'address'];
+      return attrs.every((item) => this.form.user[item] !== '');
+    },
+  },
+};
+</script>

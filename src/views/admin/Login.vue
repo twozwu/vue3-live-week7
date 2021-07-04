@@ -58,7 +58,7 @@ export default {
           document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
           this.$router.push('/admin/products');
         } else {
-          alert(response.data.message);
+          this.$httpToastMessage(response, response.data.message);
         }
       });
     },

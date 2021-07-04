@@ -1,5 +1,5 @@
 <template>
-  <div class="toast-container position-absolute pe-3 bottom-0 end-0" style="z-index: 1500">
+  <div class="toast-container position-fixed pe-3 bottom-50 end-0" style="z-index: 1500">
     <div
       v-for="(msg, key) in messages"
       :key="key"
@@ -42,7 +42,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.emitter);
     this.emitter.on('push-message', (message) => {
       const { style = 'success', title, content } = message;
       this.messages.push({ style, title, content });

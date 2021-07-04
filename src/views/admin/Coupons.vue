@@ -50,20 +50,17 @@
     ref="couponModal"
   ></coupon-modal>
   <del-item-modal ref="delModal" @delItem="delItem"></del-item-modal>
-  <loading :active="isLoading"></loading>
 </template>
 
 <script>
 import couponModal from '@/components/admin/CouponModal.vue';
 import delItemModal from '@/components/admin/DelItemModal.vue';
-import loading from '@/components/Loading.vue';
 import pagination from '@/components/admin/Pagination.vue';
 
 export default {
   components: {
     couponModal,
     delItemModal,
-    loading,
     pagination,
   },
   data() {
@@ -80,18 +77,17 @@ export default {
   },
   methods: {
     getCoupons(page = 1) {
-      this.isLoading = true;
+      this.emitter.emit('isLoading', true);
       this.axios
         .get(`${this.apiUrl}/api/${this.apiPath}/admin/coupons?page=${page}`)
         .then((response) => {
           if (response.data.success) {
-            // console.log(response.data.products);
             this.coupons = response.data.coupons;
             this.pagination = response.data.pagination;
-            this.isLoading = false;
           } else {
-            alert(response.data.message);
+            this.$httpToastMessage(response, response.data.message);
           }
+          this.emitter.emit('isLoading', false);
         })
         .catch((error) => console.log(error));
     },
@@ -109,7 +105,7 @@ export default {
       this.$refs.delModal.openModal(item);
     },
     updateCoupon(tempCoupon) {
-      this.isLoading = true;
+      this.emitter.emit('isLoading', true);
       if (this.isNew) {
         const url = `${this.apiUrl}/api/${this.apiPath}/admin/coupon`;
         this.$http
@@ -117,13 +113,12 @@ export default {
           .then((response) => {
             if (response.data.success) {
               this.$httpToastMessage(response, '新增優惠券');
-              this.isLoading = false;
               this.getCoupons();
               this.$refs.couponModal.hideModal();
             } else {
               this.$httpToastMessage(response, '新增優惠券');
-              this.isLoading = false;
             }
+            this.emitter.emit('isLoading', false);
           })
           .catch((error) => {
             console.log(error);
@@ -135,13 +130,12 @@ export default {
           .then((response) => {
             if (response.data.success) {
               this.$httpToastMessage(response, '更新優惠券');
-              this.isLoading = false;
               this.getCoupons();
               this.$refs.couponModal.hideModal();
             } else {
               this.$httpToastMessage(response, '更新優惠券');
-              this.isLoading = false;
             }
+            this.emitter.emit('isLoading', false);
           })
           .catch((error) => {
             console.log(error);
@@ -150,7 +144,7 @@ export default {
     },
     delItem() {
       const url = `${this.apiUrl}/api/${this.apiPath}/admin/coupon/${this.tempCoupon.id}`;
-      this.isLoading = true;
+      this.emitter.emit('isLoading', true);
       this.$http
         .delete(url)
         .then((response) => {
@@ -158,12 +152,11 @@ export default {
             this.$httpToastMessage(response, '刪除優惠券');
             const delComponent = this.$refs.delModal;
             delComponent.hideModal();
-            this.isLoading = false;
             this.getCoupons();
           } else {
             this.$httpToastMessage(response, '刪除優惠券');
-            this.isLoading = false;
           }
+          this.emitter.emit('isLoading', false);
         })
         .catch((error) => {
           console.log(error);

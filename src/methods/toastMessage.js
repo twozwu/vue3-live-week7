@@ -1,7 +1,17 @@
 import emitter from '@/methods/mitt';
 
 export default function (response, title = '更新') {
-  if (response.data.success) {
+  if (response === true) {
+    emitter.emit('push-message', {
+      style: 'success',
+      title: `${title}`,
+    });
+  } else if (!response) {
+    emitter.emit('push-message', {
+      style: 'danger',
+      title: `${title}`,
+    });
+  } else if (response.data.success) {
     emitter.emit('push-message', {
       style: 'success',
       title: `${title}成功`,

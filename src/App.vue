@@ -1,5 +1,7 @@
 <template>
+  <loading :active="isLoading"></loading>
   <router-view />
+  <ToastMessage></ToastMessage>
 </template>
 
 <style lang="scss">
@@ -9,6 +11,7 @@
 html,
 body {
   font-family: 'Noto Sans TC', sans-serif;
+  height: 100vh;
 }
 a {
   color: inherit; /* blue colors for links too */
@@ -17,5 +20,20 @@ a {
 </style>
 
 <script>
-export default {};
+import ToastMessage from '@/components/ToastMessage.vue';
+import Loading from '@/components/Loading.vue';
+
+export default {
+  components: { ToastMessage, Loading },
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
+  created() {
+    this.emitter.on('isLoading', (bool) => {
+      this.isLoading = bool;
+    });
+  },
+};
 </script>

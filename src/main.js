@@ -20,6 +20,7 @@ import {
   faPlus,
   faTimes,
   faPaperPlane,
+  faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import $httpToastMessage from '@/methods/toastMessage';
@@ -43,7 +44,7 @@ configure({
 setLocale('zh_TW');
 
 // fontAwesome
-library.add(faSpinner, faMinus, faPlus, faTimes, faPaperPlane);
+library.add(faSpinner, faMinus, faPlus, faTimes, faPaperPlane, faChevronLeft);
 
 const app = createApp(App);
 app.use(router);
@@ -62,4 +63,5 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.productionTip = true;
 
 app.component('Loading', Loading);
+
 app.mount('#app');

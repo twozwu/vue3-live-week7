@@ -123,11 +123,11 @@ export default {
         .delete(`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`)
         .then((res) => {
           if (res.data.success) {
-            alert(res.data.message);
+            this.$httpToastMessage(res, res.data.message);
             this.getData();
           } else {
             console.log(res.data.message);
-            alert(res.data.message);
+            this.$httpToastMessage(res, res.data.message);
           }
           this.$refs.delProductModal.hideModal();
         })

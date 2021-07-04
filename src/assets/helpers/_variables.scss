@@ -75,6 +75,8 @@ $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
 $dark: $gray-900 !default;
+$chocolate: #774a37;
+$chocolight: #cc8549;
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
@@ -582,6 +584,8 @@ $table-variants: (
   "danger": shift-color($danger, $table-bg-scale),
   "light": $light,
   "dark": $dark,
+  "chocolate": $chocolate,
+  "chocolight": $chocolight,
 ) !default;
 // scss-docs-end table-loop
 

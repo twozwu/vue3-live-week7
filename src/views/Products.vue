@@ -2,16 +2,63 @@
   <loading :active="isLoading"></loading>
   <swiper-header class="mb-5"></swiper-header>
   <div class="category container text-center">
+    <!-- <nav
+      class="nav flex-column flex-sm-row fs-5 fs-sm-6 mb-3 border border-chocolate border-center
+      rounded-3 bg-chocolate text-white"
+    >
+      <a
+        class="flex-sm-fill text-sm-center nav-link"
+        aria-current="page"
+        href="#"
+        :class="{ active: isActive === 'all' }"
+        @click.prevent="filter('all')"
+        >全部產品</a
+      >
+      <a
+        class="flex-sm-fill text-center nav-link"
+        href="#"
+        :class="{ active: isActive === 'dark' }"
+        aria-current="page"
+        @click.prevent="filter('dark')"
+        >黑巧克力</a
+      >
+      <a
+        class="flex-sm-fill text-sm-center nav-link"
+        href="#"
+        :class="{ active: isActive === 'cookie' }"
+        @click.prevent="filter('cookie')"
+        >餅乾</a
+      >
+      <a
+        class="flex-sm-fill text-sm-center nav-link"
+        href="#"
+        tabindex="-1"
+        aria-disabled="true"
+        :class="{ active: isActive === 'cake' }"
+        @click.prevent="filter('cake')"
+        >蛋糕</a
+      >
+      <a
+        class="flex-sm-fill text-sm-center nav-link"
+        href="#"
+        tabindex="-1"
+        aria-disabled="true"
+        :class="{ active: isActive === 'drink' }"
+        @click.prevent="filter('drink')"
+        >飲料</a
+      >
+    </nav>-->
     <!-- 商品頁籤 -->
     <ul
-      class="nav justify-content-around fs-5 mb-3 border border-chocolate border-center
-      rounded-3 bg-chocolate text-white row"
+      class="nav justify-content-around
+      fs-5 fs-sm-6 mb-3 border border-chocolate border-center
+      rounded-3 bg-chocolate text-white"
     >
-      <li class="nav-item col p-0">
+      <li class="nav-item col nav-link p-0">
         <a
-          class="nav-link"
+          class="nav-link flex-sm-fill"
           :class="{ active: isActive === 'all' }"
-          aria-current="page"
+          aria-current="page h-100"
           href="#"
           @click.prevent="filter('all')"
           >全部產品</a
@@ -19,7 +66,7 @@
       </li>
       <li class="nav-item col p-0">
         <a
-          class="nav-link"
+          class="nav-link h-100"
           :class="{ active: isActive === 'dark' }"
           aria-current="page"
           href="#"
@@ -29,7 +76,7 @@
       </li>
       <li class="nav-item col p-0">
         <a
-          class="nav-link"
+          class="nav-link h-100"
           href="#"
           :class="{ active: isActive === 'cookie' }"
           @click.prevent="filter('cookie')"
@@ -38,7 +85,7 @@
       </li>
       <li class="nav-item col p-0">
         <a
-          class="nav-link"
+          class="nav-link h-100"
           href="#"
           :class="{ active: isActive === 'cake' }"
           @click.prevent="filter('cake')"
@@ -47,7 +94,7 @@
       </li>
       <li class="nav-item col p-0">
         <a
-          class="nav-link"
+          class="nav-link h-100"
           href="#"
           :class="{ active: isActive === 'drink' }"
           @click.prevent="filter('drink')"
@@ -58,15 +105,19 @@
   </div>
   <div class="container-xl">
     <div class="row">
-      <div class="col-md-4" v-for="item in tempProducts" :key="item.id">
-        <div class="card border-0 mb-4 position-relative position-relative">
-          <img :src="item.imageUrl" class="card-img-top rounded-0 max-height" alt="..." />
+      <div class="col-md-4 cardBorder pt-2" v-for="item in tempProducts" :key="item.id">
+        <div class="card border-0 mb-4 position-relative">
+          <div class="position-relative">
+            <a :href="`#/detail/${item.id}`" class="imgTop">
+              <img :src="item.imageUrl" class="card-img-top rounded-0 max-height " :alt="item.title"
+            /></a>
+          </div>
           <a href="#" class="text-dark">
             <i class="far fa-heart position-absolute" style="right: 16px; top: 16px"></i>
           </a>
           <div class="card-body p-0">
-            <h5 class="mb-0 mt-3">
-              <a href="./detail.html">{{ item.title }}</a>
+            <h5 class="mb-0 mt-3 fw-bold">
+              <a :href="`#/detail/${item.id}`">{{ item.title }}</a>
             </h5>
             <p class="card-text mb-0">
               NT${{ $filter.currency(item.price) }}
@@ -76,7 +127,9 @@
             </p>
             <p class="text-muted mt-3"></p>
             <div class="row g-1 justify-content-around">
-              <button class="col-5 btn btn-outline-chocolate">詳細資料</button>
+              <router-link class="col-5 btn btn-outline-chocolate" :to="`/detail/${item.id}`"
+                >詳細資料</router-link
+              >
               <button class="col-5 btn btn-chocolight" @click="addToCart(item.id)">
                 <font-awesome-icon
                   icon="spinner"
@@ -97,6 +150,9 @@
 //#774a37
 <style lang="scss">
 .border-center {
+  a:not(:last-child) {
+    border-right: 1px solid #fff;
+  }
   li:not(:last-child) {
     border-right: 1px solid #fff;
   }
@@ -107,15 +163,34 @@
   object-fit: cover;
 }
 
+.cardBorder:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: #ffebe2;
+  .card-body {
+    background-color: #ffebe2;
+  }
+  .imgTop::before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #fff;
+  }
+}
+
 .nav-link {
   color: white;
 }
 .category .nav-link:hover {
   background-color: #fff;
-  color: #000;
+  color: #774a37;
 }
 .category .active {
-  color: black;
+  color: #774a37;
   background-color: #fff;
 }
 </style>
@@ -123,8 +198,10 @@
 <script>
 import detailComponent from './Product.vue';
 import SwiperHeader from '../components/SwiperHeader.vue';
+import Loading from '../components/Loading.vue';
 
 export default {
+  components: { detailComponent, SwiperHeader, Loading },
   data() {
     return {
       apiUrl: process.env.VUE_APP_API,
@@ -146,8 +223,9 @@ export default {
             // console.log(response.data.products);
             this.products = response.data.products;
             this.tempProducts = response.data.products;
+            this.filter(this.$route.query.category);
           } else {
-            alert(response.data.message);
+            this.$httpToastMessage(response, response.data.message);
           }
           this.isLoading = false;
         })
@@ -165,23 +243,16 @@ export default {
         .post(url, { data: cart })
         .then((response) => {
           if (response.data.success) {
-            alert(response.data.message);
-            this.loadingStatus = '';
+            this.$httpToastMessage(response, '加入購物車');
             this.emitter.emit('navGetCart'); // 呼叫cart的getCart方法
           } else {
-            alert(response.data.message);
-            this.loadingStatus = '';
+            this.$httpToastMessage(response, response.data.message);
           }
+          this.loadingStatus = '';
         })
         .catch((error) => console.log(error));
     },
-    openModal(action, item) {
-      if (action === 'detail') {
-        this.tempProducts = { ...item };
-        this.$refs.detail.openModal();
-      }
-    },
-    filter(category) {
+    filter(category = 'all') {
       this.isLoading = true;
       this.isActive = category;
       if (category === 'all') {
@@ -195,6 +266,5 @@ export default {
   mounted() {
     this.getData();
   },
-  components: { detailComponent, SwiperHeader },
 };
 </script>

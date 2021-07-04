@@ -9,15 +9,11 @@
       <a href="#" @click.prevent="signout">登出</a>
     </div>
   </div>
-  <ToastMessage></ToastMessage>
   <router-view v-if="checkSuccess"></router-view>
 </template>
 
 <script>
-import ToastMessage from '../../components/ToastMessage.vue';
-
 export default {
-  components: { ToastMessage },
   data() {
     return {
       checkSuccess: false,
@@ -40,13 +36,13 @@ export default {
           }
         });
       } else {
-        alert('您尚未登入，請重新登入');
+        this.$httpToastMessage(false, '您尚未登入，請重新登入');
         this.$router.push('/login');
       }
     },
     signout() {
       document.cookie = 'hexToken=;expires=;';
-      alert('token 已清除');
+      this.$httpToastMessage(true, 'token 已清除');
       this.$router.push('/login');
     },
   },

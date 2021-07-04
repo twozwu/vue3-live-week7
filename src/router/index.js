@@ -16,8 +16,30 @@ const routes = [
         component: () => import('../views/Products.vue'),
       },
       {
+        path: 'detail/:id',
+        component: () => import('../views/Detail.vue'),
+      },
+      {
         path: 'cart',
         component: () => import('../views/Cart.vue'),
+        children: [
+          {
+            path: '',
+            component: () => import('../views/CartIndex.vue'),
+          },
+          {
+            path: 'profile',
+            component: () => import('../views/Profile.vue'),
+          },
+          {
+            path: 'order/:id',
+            component: () => import('../views/Order.vue'),
+          },
+        ],
+      },
+      {
+        path: 'success',
+        component: () => import('../views/CheckoutSuccess.vue'),
       },
     ],
   },
