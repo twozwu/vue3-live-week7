@@ -8,7 +8,7 @@
     aria-hidden="true"
     ref="modal"
   >
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
@@ -23,16 +23,22 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="title">標題</label>
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              v-model="tempCoupon.title"
-              placeholder="請輸入標題"
-            />
-          </div>
+          <Form ref="form" v-slot="{ errors }" @submit="onSubmit">
+            <div class="mb-3">
+              <label for="title">標題</label>
+              <Field
+                type="text"
+                class="form-control"
+                id="title"
+                v-model="tempCoupon.title"
+                name="title"
+                :class="{ 'is-invalid': errors['title'] }"
+                rules="required"
+                placeholder="請輸入標題"
+              />
+              <ErrorMessage name="title" class="invalid-feedback"></ErrorMessage>
+            </div>
+          </Form>
           <div class="mb-3">
             <label for="coupon_code">優惠碼</label>
             <input
@@ -76,9 +82,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="$emit('updateCoupon', tempCoupon)">
-            <span v-if="isNew">新增優惠券</span>
-            <span v-else>更新優惠券</span>
+          <button type="button" class="btn btn-primary" @click="$emit('update-coupon', tempCoupon)">
+            更新優惠券
           </button>
         </div>
       </div>
@@ -105,17 +110,33 @@ export default {
     return {
       tempCoupon: {},
       due_date: '',
+      errors: {
+        title: false,
+      },
+      errorMsg: {
+        title: '',
+      },
     };
   },
-  emits: ['updateCoupon'],
+  methods: {
+    onSubmit() {
+      console.log('abc');
+    },
+  },
+  emits: ['update-coupon'],
   watch: {
     coupon() {
       this.tempCoupon = this.coupon;
       // 將時間格式改為 YYYY-MM-DD
-      const dateAndTime = new Date(this.tempCoupon.due_date).toISOString().split('T');
-      [this.due_date] = dateAndTime; // 解構賦值，從陣列中取出值，預設會取第一個["2021-06-22", "08:28:58.891Z"]
+      const dateAndTime = new Date(this.tempCoupon.due_date * 1000).toISOString().split('T');
+      // 解構賦值，從陣列中取出值，預設會取第一個["2021-06-22", "08:28:58.891Z"]
+      [this.due_date] = dateAndTime;
+    },
+    due_date() {
+      this.tempCoupon.due_date = Math.floor(new Date(this.due_date) / 1000);
     },
   },
+
   mixins: [modalMixin],
 };
 </script>

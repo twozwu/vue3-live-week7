@@ -149,7 +149,6 @@ export default {
       isPaid: false,
     };
   },
-  emits: ['update-product'],
   mixins: [modalMixin],
   watch: {
     order() {

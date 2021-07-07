@@ -45,11 +45,11 @@
   </div>
   <coupon-modal
     :coupon="tempCoupon"
-    :isNew="isNew"
-    @updateCoupon="updateCoupon"
+    :is-new="isNew"
+    @update-coupon="updateCoupon"
     ref="couponModal"
   ></coupon-modal>
-  <del-item-modal ref="delModal" @delItem="delItem"></del-item-modal>
+  <del-item-modal ref="delModal" @del-item="delItem"></del-item-modal>
 </template>
 
 <script>
@@ -93,8 +93,9 @@ export default {
     },
     openModal(isNew, item) {
       this.isNew = isNew;
-      if (isNew) {
-        this.tempCoupon = { due_date: Date.now() };
+      if (this.isNew) {
+        // this.tempCoupon = { due_date: '' };
+        this.tempCoupon = { due_date: Date.now() / 1000 };
       } else {
         this.tempCoupon = { ...item };
       }

@@ -68,6 +68,7 @@
   <div class="d-flex justify-content-center" v-if="orderList.length">
     <pagination :pages="pagination" @emit-page="getList"></pagination>
   </div>
+  <!--Model-->
   <order-modal :order="tempOrder" @update-paid="updateOrder" ref="orderModal"></order-modal>
   <del-item-modal @delItem="delItem" ref="delModal"></del-item-modal>
 </template>

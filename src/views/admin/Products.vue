@@ -65,7 +65,7 @@
   <!-- Modal -->
   <product-modal :pagination="pagination" ref="productModal" @update="getData"></product-modal>
 
-  <del-product-modal ref="delProductModal" @emitItem="delItem"></del-product-modal>
+  <del-product-modal ref="delProductModal" @delItem="delItem"></del-product-modal>
   <!-- Modal -->
 </template>
 
@@ -91,6 +91,7 @@ export default {
   components: { pagination, productModal, delProductModal },
   methods: {
     getData(page = 1) {
+      this.emitter.emit('isLoading', true);
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
       this.axios.defaults.headers.common.Authorization = `${token}`;
       this.axios
@@ -103,6 +104,7 @@ export default {
             // alert(res.data.message);
             console.log(res.data);
           }
+          this.emitter.emit('isLoading', false);
         })
         .catch((error) => console.log(error));
     },
@@ -119,6 +121,7 @@ export default {
       }
     },
     delItem() {
+      this.emitter.emit('isLoading', true);
       this.axios
         .delete(`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`)
         .then((res) => {
@@ -130,6 +133,7 @@ export default {
             this.$httpToastMessage(res, res.data.message);
           }
           this.$refs.delProductModal.hideModal();
+          this.emitter.emit('isLoading', false);
         })
         .catch((error) => console.log(error));
     },
