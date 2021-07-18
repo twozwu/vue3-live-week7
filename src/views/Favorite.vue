@@ -1,111 +1,12 @@
 <template>
   <loading :active="isLoading"></loading>
   <swiper-header class="mb-5"></swiper-header>
-  <div class="category container text-center">
-    <!-- <nav
-      class="nav flex-column flex-sm-row fs-5 fs-sm-6 mb-3 border border-chocolate border-center
-      rounded-3 bg-chocolate text-white"
-    >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        aria-current="page"
-        href="#"
-        :class="{ active: isActive === 'all' }"
-        @click.prevent="filter('all')"
-        >全部產品</a
-      >
-      <a
-        class="flex-sm-fill text-center nav-link"
-        href="#"
-        :class="{ active: isActive === 'dark' }"
-        aria-current="page"
-        @click.prevent="filter('dark')"
-        >黑巧克力</a
-      >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        href="#"
-        :class="{ active: isActive === 'cookie' }"
-        @click.prevent="filter('cookie')"
-        >餅乾</a
-      >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        href="#"
-        tabindex="-1"
-        aria-disabled="true"
-        :class="{ active: isActive === 'cake' }"
-        @click.prevent="filter('cake')"
-        >蛋糕</a
-      >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        href="#"
-        tabindex="-1"
-        aria-disabled="true"
-        :class="{ active: isActive === 'drink' }"
-        @click.prevent="filter('drink')"
-        >飲料</a
-      >
-    </nav>-->
-    <!-- 商品頁籤 -->
-    <ul
-      class="nav justify-content-around
-      fs-5 fs-sm-6 mb-3 border border-chocolate border-center
-      rounded-3 bg-chocolate text-white"
-    >
-      <li class="nav-item col nav-link p-0">
-        <a
-          class="nav-link flex-sm-fill"
-          :class="{ active: isActive === 'all' }"
-          aria-current="page h-100"
-          href="#"
-          @click.prevent="filter('all')"
-          >全部產品</a
-        >
-      </li>
-      <li class="nav-item col p-0">
-        <a
-          class="nav-link h-100"
-          :class="{ active: isActive === 'dark' }"
-          aria-current="page"
-          href="#"
-          @click.prevent="filter('dark')"
-          >黑巧克力</a
-        >
-      </li>
-      <li class="nav-item col p-0">
-        <a
-          class="nav-link h-100"
-          href="#"
-          :class="{ active: isActive === 'cookie' }"
-          @click.prevent="filter('cookie')"
-          >餅乾</a
-        >
-      </li>
-      <li class="nav-item col p-0">
-        <a
-          class="nav-link h-100"
-          href="#"
-          :class="{ active: isActive === 'cake' }"
-          @click.prevent="filter('cake')"
-          >蛋糕</a
-        >
-      </li>
-      <li class="nav-item col p-0">
-        <a
-          class="nav-link h-100"
-          href="#"
-          :class="{ active: isActive === 'drink' }"
-          @click.prevent="filter('drink')"
-          >飲料</a
-        >
-      </li>
-    </ul>
-  </div>
   <div class="container-xl">
-    <div class="row">
-      <div class="col-md-4 cardBorder pt-2" v-for="item in tempProducts" :key="item.id">
+    <div class="row" v-if="!favoriteItems.length">
+      <p class="h3 text-center">我的最愛項目為空</p>
+    </div>
+    <div class="row" v-else>
+      <div class="col-md-4 cardBorder pt-2" v-for="item in favoriteItems" :key="item.id">
         <div class="card border-0 mb-4 position-relative">
           <div class="position-relative">
             <a :href="`#/detail/${item.id}`" class="imgTop">
@@ -207,16 +108,6 @@ import detailComponent from './Product.vue';
 import SwiperHeader from '../components/SwiperHeader.vue';
 import Loading from '../components/Loading.vue';
 
-const favoriteMethods = {
-  save(favorite) {
-    const favoriteString = JSON.stringify(favorite);
-    localStorage.setItem('favorite', favoriteString);
-  },
-  get() {
-    return JSON.parse(localStorage.getItem('favorite'));
-  },
-};
-
 export default {
   components: { detailComponent, SwiperHeader, Loading },
   data() {
@@ -228,20 +119,26 @@ export default {
       loadingStatus: '',
       isActive: 'all',
       isLoading: false,
-      myFavorite: favoriteMethods.get() || [],
+      myFavorite: [],
+      favoriteItems: [],
     };
   },
   methods: {
+    favoriteSet(favorite) {
+      const favoriteString = JSON.stringify(favorite);
+      localStorage.setItem('favorite', favoriteString);
+    },
+    favoriteGet() {
+      this.myFavorite = JSON.parse(localStorage.getItem('favorite'));
+    },
     getData() {
       this.isLoading = true;
       this.axios
         .get(`${this.apiUrl}/api/${this.apiPath}/products/all`)
         .then((response) => {
           if (response.data.success) {
-            // console.log(response.data.products);
             this.products = response.data.products;
-            this.tempProducts = response.data.products;
-            this.filter(this.$route.query.category);
+            this.favoriteFilter();
           } else {
             this.$httpToastMessage(response, response.data.message);
           }
@@ -250,7 +147,6 @@ export default {
         .catch((error) => console.log(error));
     },
     addToCart(id, qty = 1) {
-      // console.log(id);
       this.loadingStatus = id;
       const cart = {
         product_id: id,
@@ -270,31 +166,37 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    filter(category = 'all') {
-      this.isLoading = true;
-      this.isActive = category;
-      if (category === 'all') {
-        this.tempProducts = this.products;
-      } else {
-        this.tempProducts = this.products.filter((item) => item.category === category);
+    favoriteFilter() {
+      for (let i = 0; i < this.myFavorite.length; i += 1) {
+        for (let j = 0; j < this.products.length; j += 1) {
+          if (this.myFavorite[i] === this.products[j].id) {
+            this.favoriteItems.push(this.products[j]);
+          }
+        }
       }
-      this.isLoading = false;
     },
     addFavorite(item) {
       // 判斷是否重複
       if (this.myFavorite.includes(item.id)) {
         this.myFavorite.splice(this.myFavorite.indexOf(item.id), 1);
         this.$httpToastMessage(false, '移除我的最愛 成功');
+        this.favoriteItems.splice(this.favoriteItems.indexOf(item), 1);
       } else {
         this.myFavorite.push(item.id);
         this.$httpToastMessage(true, '加入我的最愛 成功');
       }
-      favoriteMethods.save(this.myFavorite);
+      this.favoriteSet(this.myFavorite);
       this.emitter.emit('navFavoriteLength');
     },
   },
+  created() {
+    this.emitter.on('productsBus', (products) => {
+      this.products = products;
+    });
+  },
   mounted() {
     this.getData();
+    this.favoriteGet();
   },
 };
 </script>

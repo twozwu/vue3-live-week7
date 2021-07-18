@@ -28,7 +28,7 @@
   </div>
   <div class="bg-chocolate py-5">
     <div class="container">
-      <div class="d-flex align-items-center justify-content-between text-white mb-md-7 mb-4">
+      <div class="d-flex align-items-center justify-content-between text-white mb-md-2 mb-4">
         <a class="text-white h4" href="#"
           ><img src="@/assets/chocologo-s.png" class="navbar-brand"
         /></a>
@@ -44,17 +44,36 @@
           </li>
         </ul>
       </div>
+      <div class="d-flex align-items-center justify-content-between text-white mb-md-4 mb-4">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d911.5220305327193!2d120.97437302926683!3d23.957323824596582!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468d9903ecdfebf%3A0x91484f4852917691!2zNTQ15Y2X5oqV57ij5Z-U6YeM6Y6u5Y2X5a6J6LevMjLomZ8!5e0!3m2!1szh-TW!2stw!4v1626628106013!5m2!1szh-TW!2stw"
+          width="600"
+          height="450"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+        ></iframe>
+      </div>
       <div
         class="d-flex flex-column flex-md-row justify-content-between
          align-items-md-end align-items-start text-white"
       >
-        <div class="mb-md-0 mb-1">
+        <div class="mb-md-0 mb-4">
           <p class="mb-0">服務專線：02-3456-7890</p>
           <p class="mb-0">行動電話：0908-0898-0838</p>
           <p class="mb-0">電子郵件：service@mail.com</p>
           <p class="mb-0">通訊地址：雲林縣古坑鄉咖啡山神奇的小巷弄888號</p>
         </div>
-        <p class="mb-0">© 2021 LOGO All Rights Reserved.</p>
+        <div>
+          <a
+            href="https://github.com/twozwu/vue3-live-week7"
+            target="_blank"
+            class="mb-2 h4 table align-middle"
+            ><i class="fab fa-github"></i></a
+          ><router-link class="btn btn-chocolate" to="/admin/products">進入後台</router-link>
+          <p class="mb-2">圖片僅為練習使用，無商業用途。</p>
+          <p class="mb-0">© 2021 LOGO All Rights Reserved.</p>
+        </div>
       </div>
     </div>
   </div>

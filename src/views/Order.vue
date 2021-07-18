@@ -1,15 +1,21 @@
 <template>
   <div class="mt-3">
-    <h3 class="my-5 my-md-6 text-center">
+    <h3 class="my-5 my-md-6 text-center" v-if="order.id">
       感謝您的訂購，歡迎再度光臨！
     </h3>
-    <div class="row px-md-6">
+    <h3 class="my-5 my-md-6 text-center" v-else>
+      您好，查無您的訂單，請確認後重新輸入。
+    </h3>
+    <div class="row px-md-6" v-if="order.id">
       <div class="col-md-7">
         <table class="table table-hover">
           <thead class="table-chocolate">
             <tr>
-              <th scope="col" colspan="2" class="text-center fw-light">
+              <th scope="col" colspan="2" class="text-center fw-light" v-if="order.is_paid">
                 以下是您的訂購資訊， 請確認後進行付款。
+              </th>
+              <th scope="col" colspan="2" class="text-center fw-light" v-else>
+                以下是您的訂購資訊， 感謝您的訂購。
               </th>
             </tr>
           </thead>
@@ -100,9 +106,14 @@
             <p class="mb-0 h4 fw-bold">總計</p>
             <p class="mb-0 h4 fw-bold">NT${{ $filter.currency(order.total) }}</p>
           </div>
-          <a href="#/products" class="btn btn-chocolight w-100 mt-4" @click.prevent="checkout"
+          <a
+            href="#/products"
+            class="btn btn-chocolight w-100 mt-4"
+            v-if="!order.is_paid"
+            @click.prevent="checkout"
             >由此付款</a
           >
+          <button class="btn btn-chocolight w-100 mt-4" v-else disabled>訂單已完成</button>
         </div>
       </div>
     </div>
@@ -119,7 +130,9 @@ export default {
       apiUrl: process.env.VUE_APP_API,
       apiPath: process.env.VUE_APP_PATH,
       order: {
+        id: '',
         user: {},
+        is_paid: false,
       },
       loadingStatus: '',
       isLoading: false,
@@ -141,16 +154,17 @@ export default {
       this.axios
         .get(apiUrl)
         .then((res) => {
-          if (res.data.success) {
+          if (res.data.success && res.data.order) {
             this.order = res.data.order;
-            console.log(this.order);
           } else {
-            this.$httpToastMessage(res, res.data.message);
+            // this.$httpToastMessage(res, res.data.message);
+            this.$httpToastMessage(false, '查無此訂單');
           }
           this.emitter.emit('isLoading', false);
         })
         .catch((error) => {
           console.log(error);
+          this.$httpToastMessage(false, '無法取得資料喔～');
         });
     },
     checkout() {
@@ -169,10 +183,16 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.emitter.emit('isLoading', false);
         });
     },
     copyOrderID() {
       document.execCommand('Copy', false, this.$refs.orderID.select());
+    },
+  },
+  watch: {
+    $route() {
+      this.getOrder();
     },
   },
   mounted() {

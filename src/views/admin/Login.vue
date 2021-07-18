@@ -14,8 +14,8 @@
             placeholder="Email address"
             v-model="user.username"
             autofocus
-            :class="{ 'is-invalid': errors['信箱'] }"
-            rules="email|required"
+            :class="{ 'is-invalid': errors['信箱'], 'is-valid': user.username }"
+            :rules="{ email: true, required: true }"
           />
           <error-message name="信箱" class="invalid-feedback"></error-message>
         </div>
@@ -28,7 +28,7 @@
             class="form-control"
             v-model="user.password"
             placeholder="Password"
-            :class="{ 'is-invalid': errors['密碼'] }"
+            :class="{ 'is-invalid': errors['密碼'], 'is-valid': user.password }"
             rules="required"
           />
           <error-message name="密碼" class="invalid-feedback"></error-message>

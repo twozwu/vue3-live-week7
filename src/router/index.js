@@ -20,6 +20,10 @@ const routes = [
         component: () => import('../views/Detail.vue'),
       },
       {
+        path: 'favorite',
+        component: () => import('../views/Favorite.vue'),
+      },
+      {
         path: 'cart',
         component: () => import('../views/Cart.vue'),
         children: [
@@ -40,6 +44,10 @@ const routes = [
       {
         path: 'success',
         component: () => import('../views/CheckoutSuccess.vue'),
+      },
+      {
+        path: 'about',
+        component: () => import('../views/About.vue'),
       },
     ],
   },
@@ -79,6 +87,14 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   linkActiveClass: 'active',
+  scrollBehavior(to) {
+    if (to.fullPath.match('new')) {
+      return {
+        top: 0, // return是針對savedPosition的屬性
+      };
+    }
+    return {};
+  },
 });
 
 export default router;

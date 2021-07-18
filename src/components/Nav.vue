@@ -10,7 +10,7 @@
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon" data-bs-dismiss="collapse"></span>
+        <span class="navbar-toggler-icon"></span>
         <!-- data-bs-dismiss="collapse" -->
       </button>
       <a href="#"><img src="@/assets/chocologo-s.png" class="navbar-brand"/></a>
@@ -23,7 +23,15 @@
             <a class="nav-link" href="#/cart">購物車</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/admin/products">後台</router-link>
+            <a class="nav-link" href="#" @click.prevent="openFindOrder">查詢訂單</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="$router.push('favorite')"
+              >我的最愛({{ myFavoriteLength }})</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="$router.push('about')">關於我們</a>
           </li>
         </ul>
       </div>
@@ -44,7 +52,6 @@
       </i>
     </div>
   </nav>
-  <!-- onclick="location.href = '#/cart'" -->
   <div
     class="offcanvas offcanvas-end"
     tabindex="-1"
@@ -67,7 +74,9 @@
           <div class="d-flex justify-content-between">
             <h2 class="">購物清單</h2>
           </div>
-          <h5 class="my-3 text-center fw-lighter" v-if="!carts.cartslength">購物車為空!</h5>
+          <h5 class="my-3 text-center fw-lighter" v-if="!carts.cartsLength">
+            購物車為空!
+          </h5>
           <div class="d-flex mt-2 bg-light" v-for="(item, index) in carts.carts" :key="item.id">
             <img
               :src="item.product.imageUrl"
@@ -160,6 +169,7 @@
       </div>
     </div>
   </div>
+  <find-order-modal ref="findOrderModal"></find-order-modal>
 </template>
 
 <style lang="scss">
@@ -177,16 +187,25 @@
 </style>
 
 <script>
+import FindOrderModal from './FindOrderModal.vue';
 // import { Offcanvas } from 'bootstrap/dist/js/bootstrap.esm.min';
 
 export default {
+  components: { FindOrderModal },
+  provide() {
+    return {
+      products: this.products,
+    };
+  },
   data() {
     return {
       apiUrl: process.env.VUE_APP_API,
       apiPath: process.env.VUE_APP_PATH,
       carts: {
-        cartsLength: '',
+        cartsLength: 0,
       },
+      myFavoriteLength: '',
+      products: {},
       loadingStatus: '',
       isLoading: false,
       offcanvas: {},
@@ -216,7 +235,6 @@ export default {
         this.getCart();
         return;
       }
-      // this.loadingStatus = data.id;
       this.emitter.emit('isLoading', true);
       const cart = {
         product_id: data.product_id,
@@ -262,13 +280,21 @@ export default {
     sendData() {
       this.emitter.emit('cartBus', this.carts);
     },
+    openFindOrder() {
+      this.$refs.findOrderModal.openModal();
+    },
+    favoriteGet() {
+      this.myFavoriteLength = JSON.parse(localStorage.getItem('favorite')).length;
+    },
   },
   created() {
     this.emitter.on('navGetCart', () => this.getCart());
     this.emitter.on('navSendData', () => this.sendData());
+    this.emitter.on('navFavoriteLength', () => this.favoriteGet());
   },
   mounted() {
     this.getCart();
+    this.favoriteGet();
   },
 };
 </script>
