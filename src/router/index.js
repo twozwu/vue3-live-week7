@@ -87,13 +87,11 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   linkActiveClass: 'active',
-  scrollBehavior(to) {
-    if (to.fullPath.match('new')) {
-      return {
-        top: 0, // return是針對savedPosition的屬性
-      };
-    }
-    return {};
+  scrollBehavior() {
+    return {
+      el: '#app',
+      top: 0,
+    };
   },
 });
 

@@ -129,7 +129,10 @@ export default {
       localStorage.setItem('favorite', favoriteString);
     },
     favoriteGet() {
-      this.myFavorite = JSON.parse(localStorage.getItem('favorite'));
+      const favorite = localStorage.getItem('favorite');
+      if (favorite) {
+        this.myFavorite = JSON.parse(favorite);
+      }
     },
     getData() {
       this.isLoading = true;

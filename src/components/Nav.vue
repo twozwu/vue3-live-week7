@@ -284,7 +284,12 @@ export default {
       this.$refs.findOrderModal.openModal();
     },
     favoriteGet() {
-      this.myFavoriteLength = JSON.parse(localStorage.getItem('favorite')).length;
+      const favorite = localStorage.getItem('favorite');
+      if (favorite) {
+        this.myFavoriteLength = JSON.parse(favorite).length;
+      } else {
+        this.myFavoriteLength = 0;
+      }
     },
   },
   created() {
