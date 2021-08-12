@@ -299,19 +299,17 @@ export default {
 
       this.axios[http](api, { data: this.product })
         .then((res) => {
-          // console.log(res);
           if (res.data.success) {
-            this.$$httpToastMessage(res, res.data.message);
+            this.$httpToastMessage(res, res.data.message);
             this.$emit('update', this.pagination.current_page);
             this.hideModal();
           } else {
-            console.log(res.data.message);
-            this.$$httpToastMessage(res, res.data.message);
+            this.$httpToastMessage(res, res.data.message);
           }
           this.loadingStatus = '';
         })
         .catch((error) => {
-          console.log(error);
+          this.$httpToastMessage(false, error);
           this.loadingStatus = '';
         });
     },
@@ -325,11 +323,9 @@ export default {
     autoImg() {
       this.product.imageUrl = 'https://picsum.photos/400';
       this.product.imagesUrl.push('');
-      // console.log(this.product.imagesUrl.length);
     },
     multiple() {
       const key = this.product.imagesUrl.length - 1;
-      //   console.log(key);
       if (this.product.imagesUrl[key] === '') {
         this.product.imagesUrl[key] = `https://picsum.photos/40${this.product.imagesUrl.length}`;
         this.product.imagesUrl.push('');
@@ -358,7 +354,6 @@ export default {
         .then((res) => {
           if (res.data.success) {
             if (key === 'main') {
-              console.log(res);
               this.product.imageUrl = res.data.imageUrl;
               this.product.imagesUrl.push('');
             } else {

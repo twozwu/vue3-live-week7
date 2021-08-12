@@ -27,16 +27,16 @@
     </div>
   </div>
   <div class="container mt-5">
-    <h3 class="border-start border-bottom border-5 px-3 border-chocolate fw-bold">黑巧克力系列</h3>
+    <h3 class="border-start border-bottom border-5 px-3 border-chocolate">黑巧克力系列</h3>
     <div class="row">
       <div class="col-7">
         <img
           class="w-100 fit"
-          src="https://images.unsplash.com/photo-1542843137-8791a6904d14?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80"
+          src="http://images.unsplash.com/photo-1542843137-8791a6904d14?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max"
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black hover-center">
+        <div class="position-absolute position-black hover-center shadow-lg">
           <h4 class="text-chocolate fw-bold">純黑巧克力</h4>
           <p>有多種口味</p>
           <ul>
@@ -56,18 +56,18 @@
         </div>
       </div>
     </div>
-    <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate fw-bold">
+    <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate">
       餅乾系列
     </h3>
     <div class="row flex-row-reverse">
       <div class="col-7">
         <img
           class="w-100 fit"
-          src="https://images.pexels.com/photos/5847103/pexels-photo-5847103.jpeg?cs=srgb&dl=pexels-roman-odintsov-5847103.jpg&fm=jpg"
+          src="https://storage.googleapis.com/vue-course-api.appspot.com/chocolate/1628588832992.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=epQqCvOxNkYNeJUIKfkHDW3%2B42E1EO61Kct5VaEAFcxOwx%2F7iV1nnC1%2BpVS4GW2WPjcrmFg%2Fyqar86jy9WQXBJtiMuahmvRN0D6YdDgMnrDj1sGKVRpffQp6%2BppiGE%2Fc%2BXiNyDUiyejU%2BYhYVKZDj%2FRnC8Fg8dNvORicSRO7gHe4UzAxyRB0YnlK9KcbpRP6Cf5J76Q9jcQi1WBH3kvR7yDjCjsPOkUyKqMNNdA0iji8ydhCsZp40T0Ec0NvHD8zsYTSbBpqxQkv6dwX2MIOv46Ym6dbIPXq96u6e8U3jZiq%2B94acsYurVJHG6vU9cPP9pcMPgRS3QUhs6a%2FXWLyLA%3D%3D"
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black-r hover-center">
+        <div class="position-absolute position-black-r hover-center shadow-lg">
           <h4 class="text-chocolate fw-bold">餅乾系列</h4>
           <p>有多種口味</p>
           <ul>
@@ -77,17 +77,17 @@
             <li class="">巧克力夾心餅乾</li>
             <li class="">卡哇依愛心巧克力薄餅</li>
           </ul>
-          <div class="row justify-content-end">
+          <div class="d-flex justify-content-end">
             <router-link
               :to="{ path: '/products', query: { category: 'cookie' } }"
-              class="position-absolute btn btn-chocolight w-100 w-md-25"
+              class="btn btn-chocolight w-100 w-md-25"
               >前往購物</router-link
             >
           </div>
         </div>
       </div>
     </div>
-    <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate fw-bold">蛋糕系列</h3>
+    <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate">蛋糕系列</h3>
     <div class="row">
       <div class="col-7">
         <img
@@ -96,7 +96,7 @@
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black hover-center">
+        <div class="position-absolute position-black hover-center shadow-lg">
           <h4 class="text-chocolate fw-bold">蛋糕系列</h4>
           <p>有多種口味</p>
           <ul>
@@ -116,7 +116,7 @@
         </div>
       </div>
     </div>
-    <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate fw-bold">
+    <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate">
       飲料系列
     </h3>
     <div class="row flex-row-reverse">
@@ -127,7 +127,7 @@
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black-r hover-center">
+        <div class="position-absolute position-black-r hover-center shadow-lg">
           <h4 class="text-chocolate fw-bold">飲料系列</h4>
           <p>有多種口味</p>
           <ul>
@@ -149,6 +149,42 @@
     </div>
   </div>
 </template>
+
+<script>
+import SwiperProducts from '../components/SwiperProducts.vue';
+
+const shuffle = require('lodash.shuffle');
+
+export default {
+  components: { SwiperProducts },
+  data() {
+    return {
+      apiUrl: process.env.VUE_APP_API,
+      apiPath: process.env.VUE_APP_PATH,
+      products: {},
+    };
+  },
+  methods: {
+    getData() {
+      this.axios
+        .get(`${this.apiUrl}/api/${this.apiPath}/products/all`)
+        .then((response) => {
+          if (response.data.success) {
+            this.products = shuffle(response.data.products);
+          } else {
+            this.$httpToastMessage(response, response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.$httpToastMessage(false, error);
+        });
+    },
+  },
+  mounted() {
+    this.getData();
+  },
+};
+</script>
 
 <style lang="scss">
 .header.bg-img {
@@ -206,37 +242,3 @@
   }
 }
 </style>
-
-<script>
-import SwiperProducts from '../components/SwiperProducts.vue';
-
-const shuffle = require('lodash.shuffle');
-
-export default {
-  components: { SwiperProducts },
-  data() {
-    return {
-      apiUrl: process.env.VUE_APP_API,
-      apiPath: process.env.VUE_APP_PATH,
-      products: {},
-    };
-  },
-  methods: {
-    getData() {
-      this.axios
-        .get(`${this.apiUrl}/api/${this.apiPath}/products/all`)
-        .then((response) => {
-          if (response.data.success) {
-            this.products = shuffle(response.data.products);
-          } else {
-            this.$httpToastMessage(response, response.data.message);
-          }
-        })
-        .catch((error) => console.log(error));
-    },
-  },
-  mounted() {
-    this.getData();
-  },
-};
-</script>

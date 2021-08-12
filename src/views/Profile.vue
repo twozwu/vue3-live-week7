@@ -1,8 +1,8 @@
 <template>
   <loading :active="isLoading"></loading>
   <div class="mt-3">
-    <h3 class="mt-6 mb-4 mx-md-6 px-3 border-start border-5 border-chocolate">填寫資料</h3>
-    <div class="row px-md-6">
+    <h3 class="mt-6 mb-4 mx-lg-6 mx-md-0 px-3 border-start border-5 border-chocolate">填寫資料</h3>
+    <div class="row px-lg-6 px-md-0">
       <div class="col-md-7">
         <Form ref="form" v-slot="{ errors }" @submit="createOrder">
           <p class="">請輸入聯絡資訊：</p>
@@ -22,7 +22,7 @@
             ></Field>
             <ErrorMessage name="email" class="invalid-feedback"></ErrorMessage>
           </div>
-          <p class="mt-5">請輸入寄送資訊：</p>
+          <p class="mt-md-5 mt-4">請輸入寄送資訊：</p>
           <div class="mb-2">
             <label for="ContactName" class="text-muted mb-0"
               >姓名<span class="text-danger"> *</span></label
@@ -81,6 +81,45 @@
               v-model="form.message"
             ></textarea>
           </div>
+
+          <div class="d-block d-md-none border p-4 mb-4 mt-md-0 mt-5">
+            <h4 class=" mb-4">我的訂單</h4>
+            <div class="d-flex mb-2" v-for="item in carts.carts" :key="item.id">
+              <img
+                :src="item.product.imageUrl"
+                :alt="item.product.title"
+                class="me-2"
+                style="width: 48px; height: 48px; object-fit: cover"
+              />
+              <div class="w-100">
+                <div class="d-flex justify-content-between">
+                  <router-link :to="`/detail/${item.product.id}`">
+                    <p class="mb-0 fw-bold">{{ item.product.title }}</p>
+                  </router-link>
+                  <p class="mb-0">NT${{ $filter.currency(item.product.price) }}</p>
+                </div>
+                <p class="mb-0 fw-normal">x{{ item.qty + item.product.unit }}</p>
+              </div>
+            </div>
+            <table class="table text-muted border-top border-bottom mt-4">
+              <tbody>
+                <tr>
+                  <th scope="row" class="border-0 px-0 pt-4 font-weight-normal">原價</th>
+                  <td class="text-end border-0 px-0 pt-4">
+                    NT${{ $filter.currency(carts.total) }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="border-0 px-0 pt-0 pb-4 font-weight-normal">付款方式</th>
+                  <td class="text-end border-0 px-0 pt-0 pb-4">ApplePay</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-between mt-4">
+              <p class="mb-0 h4 fw-bold">總計</p>
+              <p class="mb-0 h4 fw-bold">NT${{ $filter.currency(carts.final_total) }}</p>
+            </div>
+          </div>
           <div class="d-flex mt-4 justify-content-between align-items-end">
             <a href="#/cart" class="text-dark mt-md-0 mt-3 align-self-center"
               ><font-awesome-icon
@@ -99,8 +138,8 @@
           </div>
         </Form>
       </div>
-      <div class="col-md-5">
-        <div class="border p-4 mb-4 mt-md-0 mt-6">
+      <div class="d-none d-md-block col-md-5">
+        <div class="border p-4 mb-4 mt-md-0 mt-5">
           <h4 class=" mb-4">我的訂單</h4>
           <div class="d-flex mb-2" v-for="item in carts.carts" :key="item.id">
             <img
@@ -110,8 +149,10 @@
               style="width: 48px; height: 48px; object-fit: cover"
             />
             <div class="w-100">
-              <div class="d-flex justify-content-between">
-                <p class="mb-0 fw-bold">{{ item.product.title }}</p>
+              <div class="d-flex flex-wrap justify-content-between">
+                <router-link :to="`/detail/${item.product.id}`">
+                  <p class="mb-0 fw-bold">{{ item.product.title }}</p>
+                </router-link>
                 <p class="mb-0">NT${{ $filter.currency(item.product.price) }}</p>
               </div>
               <p class="mb-0 fw-normal">x{{ item.qty + item.product.unit }}</p>
@@ -133,14 +174,11 @@
             <p class="mb-0 h4 fw-bold">總計</p>
             <p class="mb-0 h4 fw-bold">NT${{ $filter.currency(carts.final_total) }}</p>
           </div>
-          <a href="#/products" class="btn btn-outline-chocolight w-100 mt-4">繼續購物</a>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped></style>
 
 <script>
 import Loading from '@/components/Loading.vue';
@@ -175,20 +213,22 @@ export default {
         .post(url, { data: order })
         .then((response) => {
           if (response.data.success) {
-            // this.$refs.form.resetForm();
-            this.isLoading = false;
             this.emitter.emit('navGetCart');
             this.$httpToastMessage(response, '訂單送出');
             this.$router.push(`/cart/order/${response.data.orderId}`);
           } else {
-            console.log(response.data.message);
             this.$httpToastMessage(response, response.data.message);
           }
+          this.isLoading = false;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.isLoading = false;
+          this.$httpToastMessage(false, error);
+        });
     },
   },
   created() {
+    // 側邊欄與本頁傳遞資料用
     this.emitter.on('cartBus', (carts) => {
       if (carts) {
         this.carts = carts;
@@ -198,6 +238,9 @@ export default {
   mounted() {
     this.emitter.emit('navSendData');
     this.emitter.emit('toProgress', 50);
+  },
+  ummounted() {
+    this.emitter.off('cartBus');
   },
   computed: {
     checkData() {

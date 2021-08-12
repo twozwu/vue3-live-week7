@@ -12,14 +12,6 @@
         </a>
       </li>
 
-      <!--
-      <li class="page-item" v-for="(item, index) in pages.total_pages" :key="index">
-      <span class="page-link bg-primary text-white"
-      v-if="item === pages.current_page">{{item}}</span>
-      <a class="page-link" href="#" v-else
-      @click.prevent="emitPage(item)">{{item}}</a>
-    </li>
-    -->
       <li
         class="page-item"
         v-for="(item, index) in pages.total_pages"

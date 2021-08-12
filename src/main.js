@@ -13,6 +13,7 @@ import AllRules from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 // 匯入繁體中文語系檔案
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSpinner,
@@ -23,13 +24,25 @@ import {
   faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 import $httpToastMessage from '@/methods/toastMessage';
+
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 import mitt from './methods/mitt';
 import { date, currency } from './methods/functions';
+
 import App from './App.vue';
 import router from './router';
+
+const sweetAlertOptions = {
+  icon: 'error',
+  title: 'Oops...',
+};
 
 // 匯入全部規則
 Object.keys(AllRules).forEach((rule) => {
@@ -50,7 +63,7 @@ const app = createApp(App);
 app.use(router);
 app.use(BootstrapIconsPlugin);
 app.use(VueAxios, axios);
-
+app.use(VueSweetalert2, sweetAlertOptions);
 app.component('Form', Form);
 app.component('Field', Field);
 app.component('ErrorMessage', ErrorMessage);

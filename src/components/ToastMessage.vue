@@ -48,5 +48,8 @@ export default {
       this.toastShow(); // 有資料才會顯示
     });
   },
+  unmounted() {
+    this.emitter.off('push-message');
+  },
 };
 </script>

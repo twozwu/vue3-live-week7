@@ -53,15 +53,15 @@
 </template>
 
 <script>
-import couponModal from '@/components/admin/CouponModal.vue';
-import delItemModal from '@/components/admin/DelItemModal.vue';
-import pagination from '@/components/admin/Pagination.vue';
+import CouponModal from '@/components/admin/CouponModal.vue';
+import DelItemModal from '@/components/admin/DelItemModal.vue';
+import Pagination from '@/components/admin/Pagination.vue';
 
 export default {
   components: {
-    couponModal,
-    delItemModal,
-    pagination,
+    CouponModal,
+    DelItemModal,
+    Pagination,
   },
   data() {
     return {
@@ -89,12 +89,14 @@ export default {
           }
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
     openModal(isNew, item) {
       this.isNew = isNew;
       if (this.isNew) {
-        // this.tempCoupon = { due_date: '' };
         this.tempCoupon = { due_date: Date.now() / 1000 };
       } else {
         this.tempCoupon = { ...item };
@@ -122,7 +124,8 @@ export default {
             this.emitter.emit('isLoading', false);
           })
           .catch((error) => {
-            console.log(error);
+            this.emitter.emit('isLoading', false);
+            this.$httpToastMessage(false, error);
           });
       } else {
         const url = `${this.apiUrl}/api/${this.apiPath}/admin/coupon/${this.tempCoupon.id}`;
@@ -139,7 +142,8 @@ export default {
             this.emitter.emit('isLoading', false);
           })
           .catch((error) => {
-            console.log(error);
+            this.emitter.emit('isLoading', false);
+            this.$httpToastMessage(false, error);
           });
       }
     },
@@ -160,7 +164,8 @@ export default {
           this.emitter.emit('isLoading', false);
         })
         .catch((error) => {
-          console.log(error);
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
         });
     },
   },

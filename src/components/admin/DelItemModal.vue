@@ -58,7 +58,6 @@ export default {
   },
   methods: {
     openModal(product, bool) {
-      // console.log(product.products.length);
       this.order = bool;
       this.product = product;
       this.modal.show();

@@ -36,35 +36,6 @@
     </swiper>
   </div>
 </template>
-<style scoped lang="scss">
-.mh-500 {
-  max-height: 250px;
-  height: 250px;
-  object-fit: cover;
-}
-.h300 {
-  max-height: 90vh;
-}
-.cardBorder:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  background-color: #ffebe2;
-  h4,
-  p {
-    padding-left: 5px;
-  }
-  .imgTop::before {
-    content: '';
-    display: inline-block;
-    position: absolute;
-    width: 95%;
-    height: 95%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #fff;
-  }
-}
-</style>
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -121,3 +92,32 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.mh-500 {
+  max-height: 250px;
+  height: 250px;
+  object-fit: cover;
+}
+.h300 {
+  max-height: 90vh;
+}
+.cardBorder:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: #ffebe2;
+  h4,
+  p {
+    padding-left: 5px;
+  }
+  .imgTop::before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #fff;
+  }
+}
+</style>

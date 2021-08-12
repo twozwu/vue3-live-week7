@@ -18,7 +18,7 @@
               v-for="(item, index) in carts.carts"
               :key="item.id"
             >
-              <th scope="row" class="border-0 px-2 font-weight-normal py-4 w-sm-title" style="">
+              <th scope="row" class="border-0 px-2 font-weight-normal py-4 w-title" style="">
                 <img
                   :src="item.product.imageUrl"
                   :alt="item.product.title"
@@ -28,9 +28,9 @@
                   {{ item.product.title }}
                 </p>
               </th>
-              <td class="border-0 align-middle w-sm-qty" style="max-width: 100px;">
-                <div class="input-group pe-md-5 pe-4">
-                  <div class="input-group-prepend">
+              <td class="border-0 align-middle w-qty px-0" style="max-width: 100px;">
+                <div class="input-group pe-md-5 mx-auto">
+                  <div class="input-group-prepend mx-auto">
                     <font-awesome-icon
                       icon="spinner"
                       pulse
@@ -48,7 +48,7 @@
                     </button>
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     class="form-control border-0 text-center my-auto shadow-none"
                     placeholder=""
                     aria-label="Example text with button addon"
@@ -58,7 +58,7 @@
                     :disabled="loadingStatus == item.id"
                     @change="updateCart(item)"
                   />
-                  <div class="input-group-append">
+                  <div class="input-group-append mx-auto">
                     <button
                       class="btn btn-outline-chocolight border-0 py-2"
                       type="button"
@@ -71,11 +71,18 @@
                   </div>
                 </div>
               </td>
-              <td class="border-0 align-middle">
+              <td class="border-0 align-middle w-price">
                 <p class="mb-0 ms-auto">NT ${{ $filter.currency(item.product.price) }}</p>
               </td>
               <td class="border-0 align-middle">
-                <a href="#" @click.prevent="delItem(item.id)"
+                <a
+                  href="#"
+                  id="tooltip"
+                  class="cart-tooltip"
+                  @click.prevent="delItem(item.id)"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="刪除商品"
                   ><font-awesome-icon icon="times" class="fas fa-times"></font-awesome-icon
                 ></a>
               </td>
@@ -87,7 +94,7 @@
             </tr>
             <tr class="bg-custom">
               <th scope="row" class="row g-0 border-0 font-weight-normal py-4">
-                <div class="col-11">
+                <div class="col-10">
                   <input
                     type="text"
                     class="form-control rounded-0 border-bottom border-top-0
@@ -113,7 +120,7 @@
                   </button>
                 </div>
               </th>
-              <td class="border-0 align-middle text-end fw-bold" style="max-width: 160px;">
+              <td class="border-0 align-middle text-end fw-bold px-0" style="max-width: 160px;">
                 <span :class="{ 'text-decoration-line-through': carts.total != carts.final_total }"
                   >總額：</span
                 >
@@ -132,15 +139,16 @@
                 ></font-awesome-icon>
                 <a
                   href="#"
+                  id="tooltip"
                   class="cart-tooltip position-relative"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="清空購物車"
-                  ><div class="toolbox">清空購物車</div>
+                  @click.prevent="clearCart"
+                >
                   <font-awesome-icon
                     icon="times"
                     class="fas fa-times text-chocolate"
-                    @click.prevent="clearCart"
                     v-if="carts.cartsLength"
                   ></font-awesome-icon>
                 </a>
@@ -160,90 +168,29 @@
           <router-link
             to="/cart/profile"
             class="col-1 mx-5 btn btn-chocolight"
-            tag="button"
+            :class="{ disabled: carts.total == 0 }"
             style="min-width:120px"
-            >下一步</router-link
           >
+            下一步
+          </router-link>
         </div>
       </div>
     </div>
   </div>
   <div class="container mt-5">
     <h3 class="mb-4 px-3 border-start border-5 border-chocolate">熱銷商品</h3>
-    <swiper-products :products="products" :column="4"></swiper-products>
+    <Swiper-products :products="products" :column="4"></Swiper-products>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.tableBorder-s {
-  border-left: 1px solid inherit;
-  border-top: 1px solid inherit;
-  border-radius: 15px 0 0 0;
-}
-.tableBorder-e {
-  border-right: 1px solid inherit;
-  border-top: 1px solid inherit;
-  border-radius: 0 15px 0 0;
-}
-.bg-custom {
-  background-color: #fffaf8;
-}
-
-.cart-tooltip:hover {
-  .toolbox {
-    display: block;
-  }
-}
-$triangle: 10px; //三角形尺寸
-$boxColor: #000;
-.toolbox {
-  width: 100px;
-  padding: 1px;
-  text-align: center;
-  background-color: $boxColor;
-  border-radius: 5px;
-  border-color: $boxColor;
-  color: white;
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -120%);
-  display: none;
-}
-.toolbox:before {
-  position: absolute;
-  content: '';
-  bottom: $triangle * -2;
-  left: 55%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-width: $triangle;
-  border-style: solid;
-  border-top-color: $boxColor;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-@media (max-width: 576px) {
-  .w-sm-title {
-    width: 200px;
-  }
-  .w-sm-qty {
-    width: 20px;
-  }
-}
-</style>
-
 <script>
-// import toolTips from '@/methods/toolTips';
-import swiperProducts from '@/components/SwiperProducts.vue';
+import SwiperProducts from '@/components/SwiperProducts.vue';
+import Tooltip from 'bootstrap/js/dist/tooltip';
 
 const shuffle = require('lodash.shuffle');
 
 export default {
-  // mixins: [toolTips],
-  components: { swiperProducts },
+  components: { SwiperProducts },
   data() {
     return {
       apiUrl: process.env.VUE_APP_API,
@@ -253,7 +200,7 @@ export default {
       loadingStatus: '',
       isLoading: false,
       couponCode: '',
-      couponData: {},
+      tooltipList: null,
     };
   },
   methods: {
@@ -262,9 +209,7 @@ export default {
     },
     updateCart(data, num = data.qty) {
       if (num < 1) {
-        // this.$httpToastMessage(true, '商品數量最少為一件!');
-        alert('商品數量最少為一件!');
-        // this.$router.go(0);
+        this.$swal('商品數量最少為一件!');
         this.getCart();
         return;
       }
@@ -280,14 +225,16 @@ export default {
         .then((response) => {
           if (response.data.success) {
             this.$httpToastMessage(response, response.data.message);
-            this.loadingStatus = '';
             this.getCart();
           } else {
-            console.log(response.data.message);
-            this.loadingStatus = '';
+            this.$httpToastMessage(response.data.message);
           }
+          this.loadingStatus = '';
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.loadingStatus = '';
+          this.$httpToastMessage(false, error);
+        });
     },
     clearCart() {
       this.loadingStatus = 'clear';
@@ -298,14 +245,16 @@ export default {
           if (response.data.success) {
             this.$httpToastMessage(response, response.data.message);
             this.getCart();
-            this.loadingStatus = '';
           } else {
             console.log(response.data.message);
             this.$httpToastMessage(response, response.data.message);
-            this.loadingStatus = '';
           }
+          this.loadingStatus = '';
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.loadingStatus = '';
+          this.$httpToastMessage(false, error);
+        });
     },
     delItem(id) {
       this.loadingStatus = id;
@@ -315,14 +264,16 @@ export default {
         .then((response) => {
           if (response.data.success) {
             this.$httpToastMessage(response, response.data.message);
-            this.loadingStatus = '';
             this.getCart();
           } else {
             this.$httpToastMessage(response, response.data.message);
-            this.loadingStatus = '';
           }
+          this.loadingStatus = '';
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.loadingStatus = '';
+          this.$httpToastMessage(false, error);
+        });
     },
     getData() {
       this.emitter.emit('isLoading', true);
@@ -337,7 +288,10 @@ export default {
           }
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
     couponOn() {
       this.emitter.emit('isLoading', true);
@@ -355,7 +309,10 @@ export default {
           }
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
   },
   created() {
@@ -365,9 +322,58 @@ export default {
       }
     });
   },
+  unmounted() {
+    this.emitter.off('cartBus');
+  },
   mounted() {
     this.getCart();
     this.getData();
   },
+  updated() {
+    const tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+    );
+    this.tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => new Tooltip(tooltipTriggerEl));
+  },
 };
 </script>
+
+<style lang="scss" scoped>
+.tableBorder-s {
+  border-left: 1px solid inherit;
+  border-top: 1px solid inherit;
+  border-radius: 10px 0 0 0;
+}
+.tableBorder-e {
+  border-right: 1px solid inherit;
+  border-top: 1px solid inherit;
+  border-radius: 0 10px 0 0;
+}
+.bg-custom {
+  background-color: #fffaf8;
+}
+
+.cart-tooltip:hover {
+  .toolbox {
+    display: block;
+  }
+}
+
+@media (max-width: 576px) {
+  .w-title {
+    width: 190px;
+  }
+  .w-qty {
+    width: 60px;
+  }
+}
+
+@media (max-width: 770px) {
+  .w-title {
+    width: 350px;
+  }
+  .w-price {
+    width: 120px;
+  }
+}
+</style>

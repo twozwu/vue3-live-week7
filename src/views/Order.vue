@@ -84,7 +84,9 @@
             />
             <div class="w-100">
               <div class="d-flex justify-content-between">
-                <p class="mb-0 fw-bold">{{ item.product.title }}</p>
+                <router-link :to="`/detail/${item.product.id}`">
+                  <p class="mb-0 fw-bold">{{ item.product.title }}</p>
+                </router-link>
                 <p class="mb-0">NT${{ $filter.currency(item.product.price) }}</p>
               </div>
               <p class="mb-0 fw-normal">x{{ item.qty + item.product.unit }}</p>
@@ -120,11 +122,8 @@
   </div>
 </template>
 
-<style lang="scss" scoped></style>
-
 <script>
 export default {
-  components: {},
   data() {
     return {
       apiUrl: process.env.VUE_APP_API,
@@ -157,14 +156,13 @@ export default {
           if (res.data.success && res.data.order) {
             this.order = res.data.order;
           } else {
-            // this.$httpToastMessage(res, res.data.message);
             this.$httpToastMessage(false, '查無此訂單');
           }
           this.emitter.emit('isLoading', false);
         })
         .catch((error) => {
-          console.log(error);
-          this.$httpToastMessage(false, '無法取得資料喔～');
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
         });
     },
     checkout() {
@@ -182,8 +180,8 @@ export default {
           this.emitter.emit('isLoading', false);
         })
         .catch((error) => {
-          console.log(error);
           this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
         });
     },
     copyOrderID() {
@@ -191,7 +189,10 @@ export default {
     },
   },
   watch: {
-    $route() {
+    $route(to) {
+      if (this.order.id === to.params.id || to.params.id === undefined) {
+        return;
+      }
       this.getOrder();
     },
   },

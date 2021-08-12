@@ -9,18 +9,22 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'index',
         component: () => import('../views/Index.vue'),
       },
       {
         path: 'products',
+        name: 'products',
         component: () => import('../views/Products.vue'),
       },
       {
         path: 'detail/:id',
+        name: 'detail',
         component: () => import('../views/Detail.vue'),
       },
       {
         path: 'favorite',
+        name: 'favorite',
         component: () => import('../views/Favorite.vue'),
       },
       {
@@ -29,6 +33,7 @@ const routes = [
         children: [
           {
             path: '',
+            name: 'cart',
             component: () => import('../views/CartIndex.vue'),
           },
           {
@@ -47,6 +52,7 @@ const routes = [
       },
       {
         path: 'about',
+        name: 'about',
         component: () => import('../views/About.vue'),
       },
     ],
@@ -70,10 +76,6 @@ const routes = [
       {
         path: 'coupons',
         component: () => import('../views/admin/Coupons.vue'),
-      },
-      {
-        path: 'test',
-        // component: () => import('../../components/ToastMessage.vue'),
       },
     ],
   },

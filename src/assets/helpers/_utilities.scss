@@ -704,3 +704,14 @@ $utilities: map-merge(
   ),
   $utilities
 );
+
+@mixin md {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: 576px) {
+    @content;
+  }
+}

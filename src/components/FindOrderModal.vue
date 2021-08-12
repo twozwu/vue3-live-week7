@@ -8,9 +8,9 @@
     aria-hidden="true"
   >
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content border-0">
         <div class="modal-header bg-chocolate text-light">
-          <p class="modal-title h5">訂單查詢</p>
+          <label class="modal-title h5" for="orderID">訂單查詢</label>
           <button
             type="button"
             class="btn-close btn-close-white"
@@ -26,6 +26,7 @@
               class="form-control border-chocolight"
               placeholder="請輸入訂單序號"
               ref="orderID"
+              id="orderID"
               v-model.trim="orderID"
             />
             <button
@@ -73,22 +74,10 @@ export default {
   mixins: [modalMixin],
   methods: {
     searchOrder() {
-      this.$router.push(`/cart/order/${this.orderID}`);
+      this.emitter.emit('navPush', `/cart/order/${this.orderID}`);
       this.hideModal();
-    },
-    resetData() {
       this.orderID = '';
     },
-    // openModal() {
-    //   this.openModal();
-    //   this.$refs.orderId.focus();
-    // },
-  },
-  created() {
-    this.resetData();
-  },
-  mounted() {
-    this.$refs.orderID.focus();
   },
 };
 </script>

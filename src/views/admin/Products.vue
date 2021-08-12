@@ -59,22 +59,23 @@
     </table>
     <!-- 分頁元件 -->
     <div class="d-flex justify-content-center">
-      <pagination :pages="pagination" @emit-page="getData"></pagination>
+      <Pagination :pages="pagination" @emit-page="getData"></Pagination>
     </div>
   </div>
   <!-- Modal -->
-  <product-modal :pagination="pagination" ref="productModal" @update="getData"></product-modal>
+  <Product-modal :pagination="pagination" ref="productModal" @update="getData"></Product-modal>
 
-  <del-product-modal ref="delProductModal" @delItem="delItem"></del-product-modal>
+  <Del-product-modal ref="delProductModal" @delItem="delItem"></Del-product-modal>
   <!-- Modal -->
 </template>
 
 <script>
-import pagination from '../../components/admin/Pagination.vue';
-import delProductModal from '../../components/admin/DelItemModal.vue';
-import productModal from '../../components/admin/ProductModal.vue';
+import Pagination from '../../components/admin/Pagination.vue';
+import DelProductModal from '../../components/admin/DelItemModal.vue';
+import ProductModal from '../../components/admin/ProductModal.vue';
 
 export default {
+  components: { Pagination, ProductModal, DelProductModal },
   data() {
     return {
       apiUrl: process.env.VUE_APP_API,
@@ -88,7 +89,6 @@ export default {
       pagination: {},
     };
   },
-  components: { pagination, productModal, delProductModal },
   methods: {
     getData(page = 1) {
       this.emitter.emit('isLoading', true);
@@ -101,12 +101,14 @@ export default {
             this.products = res.data.products;
             this.pagination = res.data.pagination;
           } else {
-            // alert(res.data.message);
-            console.log(res.data);
+            this.$httpToastMessage(res.data.message);
           }
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
     openModal(action, item) {
       if (action === 'newItem') {
@@ -129,13 +131,15 @@ export default {
             this.$httpToastMessage(res, res.data.message);
             this.getData();
           } else {
-            console.log(res.data.message);
             this.$httpToastMessage(res, res.data.message);
           }
           this.$refs.delProductModal.hideModal();
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
   },
   mounted() {

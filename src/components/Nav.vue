@@ -4,48 +4,71 @@
       <button
         class="navbar-toggler"
         type="button"
-        data-bs-toggle="collapse"
         data-bs-target="#navbarNav"
         aria-controls="navbarNav"
         aria-expanded="false"
         aria-label="Toggle navigation"
+        @click="navbarToggle"
       >
         <span class="navbar-toggler-icon"></span>
-        <!-- data-bs-dismiss="collapse" -->
       </button>
-      <a href="#"><img src="@/assets/chocologo-s.png" class="navbar-brand"/></a>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <a href="#" @click.prevent="routerPush('/#')"
+        ><img src="@/assets/chocologo-s.png" class="navbar-brand"
+      /></a>
+      <div class="collapse navbar-collapse" id="navbarNav" ref="navbar">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link class="nav-link" to="/products">產品列表</router-link>
+            <a
+              class="nav-link"
+              :class="{ active: $route.name == 'products' }"
+              href="#"
+              @click.prevent="routerPush('/products')"
+              >產品列表</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#/cart">購物車</a>
+            <a
+              class="nav-link"
+              :class="{ active: $route.name === 'cart' }"
+              href="#"
+              @click.prevent="routerPush('/cart')"
+              >購物車</a
+            >
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" @click.prevent="openFindOrder">查詢訂單</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="$router.push('favorite')"
-              >我的最愛({{ myFavoriteLength }})</a
+            <router-link
+              class="nav-link"
+              :class="{ active: $route.name == 'favorite' }"
+              to="/favorite"
+              @click.prevent="routerPush('/favorite')"
+              >我的最愛({{ myFavoriteLength }})</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="$router.push('about')">關於我們</a>
+            <a
+              class="nav-link"
+              href="#"
+              :class="{ active: $route.name == 'about' }"
+              @click.prevent="routerPush('/about')"
+              >關於我們</a
+            >
           </li>
         </ul>
       </div>
       <i
         class=" position-relative"
         style="cursor: pointer;"
-        data-bs-toggle="offcanvas"
         data-bs-target="#offcanvasRight"
         aria-controls="offcanvasRight"
+        @click="canvasToggle"
       >
-        <b-icon-cart2 class="navbar-brand fs-1 navbar-expand"></b-icon-cart2
+        <b-icon-cart2 class="cart-icon navbar-brand navbar-expand"></b-icon-cart2
         ><span
-          class="bg-danger position-absolute top-20 start-50
-            translate-middle fs-7 d-inline-block badge rounded-pill"
+          class="bg-danger position-absolute top-20 start-60
+            translate-middle fs-6 px-2 py-1 d-inline-block badge rounded-pill"
           v-if="carts.cartsLength != ''"
           >{{ carts.cartsLength }}</span
         >
@@ -78,11 +101,13 @@
             購物車為空!
           </h5>
           <div class="d-flex mt-2 bg-light" v-for="(item, index) in carts.carts" :key="item.id">
-            <img
-              :src="item.product.imageUrl"
-              :alt="item.product.title"
-              style="width: 120px; height: 120px; object-fit: cover;"
-            />
+            <div class="py-3">
+              <img
+                :src="item.product.imageUrl"
+                :alt="item.product.title"
+                style="width: 120px; height: 120px; object-fit: cover;"
+              />
+            </div>
             <div class="w-100 p-3 position-relative">
               <a
                 href="#"
@@ -107,9 +132,8 @@
                     </button>
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     class="form-control border-0 text-center my-auto shadow-none bg-light px-0"
-                    placeholder=""
                     aria-label="Example text with button addon"
                     aria-describedby="button-addon1"
                     v-model.number="item.qty"
@@ -162,8 +186,11 @@
             <p class="mb-0 h4 fw-bold">最終金額：</p>
             <p class="mb-0 h4 fw-bold">NT${{ $filter.currency(carts.final_total) }}</p>
           </div>
-          <a href="#/cart" class="btn btn-chocolight mt-4 text-end py-3" @click.prevent="goCheckout"
-            >前往結帳</a
+          <router-link
+            to="/cart"
+            class="btn btn-chocolight mt-4 text-end py-3"
+            @click="routerPush('/cart')"
+            >前往結帳</router-link
           >
         </div>
       </div>
@@ -172,23 +199,10 @@
   <find-order-modal ref="findOrderModal"></find-order-modal>
 </template>
 
-<style lang="scss">
-.rem2 {
-  width: 1.5rem;
-}
-
-.top-20 {
-  top: 20%;
-}
-
-.fs-7 {
-  font-size: 0.5rem;
-}
-</style>
-
 <script>
+import Collapse from 'bootstrap/js/dist/collapse';
+import Offcanvas from 'bootstrap/js/dist/offcanvas';
 import FindOrderModal from './FindOrderModal.vue';
-// import { Offcanvas } from 'bootstrap/dist/js/bootstrap.esm.min';
 
 export default {
   components: { FindOrderModal },
@@ -205,10 +219,10 @@ export default {
         cartsLength: 0,
       },
       myFavoriteLength: '',
-      products: {},
       loadingStatus: '',
       isLoading: false,
-      offcanvas: {},
+      navbar: null,
+      canvas: null,
     };
   },
   methods: {
@@ -221,17 +235,21 @@ export default {
             this.carts.cartsLength = this.carts.carts.length;
             this.sendData();
           } else {
-            console.log(response.data.message);
             this.$httpToastMessage(response, response.data.message);
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.$httpToastMessage(false, error);
+        });
     },
     updateCart(data, num = data.qty) {
       if (num < 1) {
-        // this.$httpToastMessage(true, '商品數量最少為一件!');
-        alert('商品數量最少為一件!');
-        // this.$router.go(0);
+        this.$swal('商品數量最少為一件!');
+        this.getCart();
+        return;
+      }
+      if (num > 99) {
+        this.$swal('商品數量最多為99！');
         this.getCart();
         return;
       }
@@ -248,11 +266,14 @@ export default {
             this.$httpToastMessage(response, response.data.message);
             this.getCart();
           } else {
-            console.log(response.data.message);
+            this.$httpToastMessage(response.data.message);
           }
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
     delItem(id) {
       this.emitter.emit('isLoading', true);
@@ -268,14 +289,10 @@ export default {
           }
           this.emitter.emit('isLoading', false);
         })
-        .catch((error) => console.log(error));
-    },
-    goCheckout() {
-      // const offcanvasRight = document.getElementById('offcanvasRight');
-      // this.offcanvas.offcanvasRight = new Offcanvas(offcanvasRight);
-      // this.$refs.offcanvasRight.hide();
-      this.$router.push('cart');
-      // console.log(this.$refs);
+        .catch((error) => {
+          this.emitter.emit('isLoading', false);
+          this.$httpToastMessage(false, error);
+        });
     },
     sendData() {
       this.emitter.emit('cartBus', this.carts);
@@ -291,15 +308,52 @@ export default {
         this.myFavoriteLength = 0;
       }
     },
+    routerPush(to) {
+      this.navbar.hide();
+      this.canvas.hide();
+      this.$router.push(to);
+    },
+    navbarToggle() {
+      this.navbar.toggle();
+    },
+    canvasToggle() {
+      this.canvas.toggle();
+    },
   },
   created() {
     this.emitter.on('navGetCart', () => this.getCart());
     this.emitter.on('navSendData', () => this.sendData());
     this.emitter.on('navFavoriteLength', () => this.favoriteGet());
+    this.emitter.on('navPush', (to) => this.routerPush(to));
   },
   mounted() {
     this.getCart();
     this.favoriteGet();
+    this.navbar = new Collapse('#navbarNav', { toggle: false });
+    this.canvas = new Offcanvas('#offcanvasRight');
+  },
+  unmouned() {
+    this.emitter.off('navGetCart');
+    this.emitter.off('navSendData');
+    this.emitter.off('navFavoriteLength');
+    this.emitter.off('navPush');
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.cart-icon {
+  font-size: 43px;
+}
+.rem2 {
+  width: 1.5rem;
+}
+
+.top-20 {
+  top: 20%;
+}
+
+.fs-7 {
+  font-size: 0.5rem;
+}
+</style>

@@ -1,16 +1,15 @@
 <template>
-  <navComponent></navComponent>
+  <NavComponent></NavComponent>
   <div style="height:72px;"></div>
   <router-view></router-view>
   <Footer></Footer>
 </template>
 
 <script>
-import navComponent from '../components/Nav.vue';
-import Footer from './Footer.vue';
+import NavComponent from '../components/Nav.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
-  components: { navComponent, Footer },
-  mounted() {},
+  components: { NavComponent, Footer },
 };
 </script>

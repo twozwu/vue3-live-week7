@@ -31,7 +31,7 @@
       type="button"
       class="position-absolute top-0 start-50 translate-middle
         btn btn-sm btn-secondary rounded-pill"
-      :class="{ 'btn-chocolate': percent >= 50 }"
+      :class="{ 'btn-chocolate': percent >= 50, disabled: percent < 50 }"
       style="width: 2rem; height:2rem;"
     >
       2
@@ -47,7 +47,7 @@
       type="button"
       class="position-absolute top-0 start-100 translate-middle
         btn btn-sm btn-secondary rounded-pill"
-      :class="{ 'btn-chocolate': percent == 100 }"
+      :class="{ 'btn-chocolate': percent == 100, disabled: percent < 100 }"
       style="width: 2rem; height:2rem;"
     >
       3
@@ -72,6 +72,9 @@ export default {
     this.emitter.on('toProgress', (data) => {
       this.percent = data;
     });
+  },
+  unmouned() {
+    this.emitter.off('toProgress');
   },
 };
 </script>

@@ -40,13 +40,7 @@
     </swiper-slide>
   </swiper>
 </template>
-<style scoped lang="scss">
-.mh-500 {
-  max-height: auto;
-  height: 400px;
-  object-fit: cover;
-}
-</style>
+
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -67,3 +61,10 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.mh-500 {
+  max-height: auto;
+  height: 400px;
+  object-fit: cover;
+}
+</style>

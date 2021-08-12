@@ -1,5 +1,5 @@
 <template>
-  <loading :active="isLoading"></loading>
+  <Loading :active="isLoading"></Loading>
   <div class="container">
     <table class="table mt-4">
       <thead>
@@ -74,14 +74,14 @@
 </template>
 
 <script>
-import loading from '@/components/Loading.vue';
+import Loading from '@/components/Loading.vue';
 import OrderModal from '../../components/admin/OrderModal.vue';
 import DelItemModal from '../../components/admin/DelItemModal.vue';
 import Pagination from '../../components/admin/Pagination.vue';
 
 export default {
   components: {
-    loading,
+    Loading,
     OrderModal,
     DelItemModal,
     Pagination,
@@ -106,13 +106,15 @@ export default {
           if (res.data.success) {
             this.orderList = res.data.orders;
             this.pagination = res.data.pagination;
-            this.isLoading = false;
           } else {
-            // alert(res.data.message);
-            console.log(res.data);
+            this.$httpToastMessage(res.data.message);
           }
+          this.isLoading = false;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.isLoading = false;
+          this.$httpToastMessage(false, error);
+        });
     },
     openModal(item) {
       this.tempOrder = { ...item };
@@ -133,7 +135,10 @@ export default {
           this.isLoading = false;
           this.$httpToastMessage(response, '刪除訂單');
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.isLoading = false;
+          this.$httpToastMessage(false, error);
+        });
     },
     updateOrder(item) {
       this.isLoading = true;
@@ -141,12 +146,18 @@ export default {
       const paid = {
         is_paid: item.is_paid,
       };
-      this.$http.put(api, { data: paid }).then((response) => {
-        this.getList(this.currentPage);
-        this.isLoading = false;
-        this.$refs.orderModal.hideModal();
-        this.$httpToastMessage(response, '更新付款狀態');
-      });
+      this.$http
+        .put(api, { data: paid })
+        .then((response) => {
+          this.getList(this.currentPage);
+          this.isLoading = false;
+          this.$refs.orderModal.hideModal();
+          this.$httpToastMessage(response, '更新付款狀態');
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.$httpToastMessage(false, error);
+        });
     },
   },
   mounted() {

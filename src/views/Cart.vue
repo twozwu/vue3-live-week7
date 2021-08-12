@@ -5,8 +5,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped></style>
-
 <script>
 import Progress from '../components/Progress.vue';
 

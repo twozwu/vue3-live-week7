@@ -69,11 +69,8 @@
           class="img-fluid"
         />
       </div>
-      <div class="col-md-5 m-auto text-center awards">
-        <h4 class="mt-4">《巧克力的獎項肯定》</h4>
-        <!-- <p class="text-muted">
-          從可可樹的田間管理為起始點、並將可可果進行集中發酵、乾燥熟成、烘烤研磨至調溫成形成為巧克力，需耗費約一個月的時間，若再加上可可豆的低溫熟成則需時六個月以上。
-        </p> -->
+      <div class="col-md-5 m-auto awards">
+        <h4 class="mt-4 text-center">《巧克力的獎項肯定》</h4>
         <ul class="text-muted">
           <li>
             2020-21ICA世界巧克力大賽全球總決選，五金七銀一銅六特別獎，連續二年全球最多獎巧克力品牌
@@ -88,7 +85,7 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .section-bg {
   background-image: url('https://images.unsplash.com/photo-1545015451-f05567aa6bcc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=934&q=80');
   background-attachment: fixed;
@@ -97,5 +94,10 @@
 }
 .awards li {
   margin-top: 50px;
+}
+@media (max-width: 768px) {
+  .awards li {
+    margin-top: 30px;
+  }
 }
 </style>

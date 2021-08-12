@@ -108,6 +108,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import modalMixin from '@/methods/modalMixin';
 
