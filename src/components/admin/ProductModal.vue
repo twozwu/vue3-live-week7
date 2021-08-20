@@ -309,7 +309,7 @@ export default {
           this.loadingStatus = '';
         })
         .catch((error) => {
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
           this.loadingStatus = '';
         });
     },
@@ -343,7 +343,7 @@ export default {
     },
     uploadImg(key) {
       if (!this.file.size) {
-        this.$httpToastMessage(false, '上傳檔案為空');
+        this.$httpToastMessage(0, '上傳檔案為空');
         return;
       }
       this.loadingStatus = 'loading';
@@ -369,7 +369,7 @@ export default {
           this.loadingStatus = '';
         })
         .catch((error) => {
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
           this.loadingStatus = '';
         });
     },

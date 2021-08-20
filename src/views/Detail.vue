@@ -136,8 +136,8 @@
 </template>
 
 <script>
-import SwiperProducts from '../components/SwiperProducts.vue';
-import Loading from '../components/Loading.vue';
+import SwiperProducts from '@/components/SwiperProducts.vue';
+import Loading from '@/components/Loading.vue';
 
 const shuffle = require('lodash.shuffle');
 
@@ -174,7 +174,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     addCart() {
@@ -197,7 +197,7 @@ export default {
         })
         .catch((error) => {
           this.loadingStatus = '';
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     getData() {
@@ -214,7 +214,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },

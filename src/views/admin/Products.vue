@@ -70,9 +70,9 @@
 </template>
 
 <script>
-import Pagination from '../../components/admin/Pagination.vue';
-import DelProductModal from '../../components/admin/DelItemModal.vue';
-import ProductModal from '../../components/admin/ProductModal.vue';
+import Pagination from '@/components/admin/Pagination.vue';
+import DelProductModal from '@/components/admin/DelItemModal.vue';
+import ProductModal from '@/components/admin/ProductModal.vue';
 
 export default {
   components: { Pagination, ProductModal, DelProductModal },
@@ -107,7 +107,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     openModal(action, item) {
@@ -138,7 +138,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },

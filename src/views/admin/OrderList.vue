@@ -75,9 +75,9 @@
 
 <script>
 import Loading from '@/components/Loading.vue';
-import OrderModal from '../../components/admin/OrderModal.vue';
-import DelItemModal from '../../components/admin/DelItemModal.vue';
-import Pagination from '../../components/admin/Pagination.vue';
+import OrderModal from '@/components/admin/OrderModal.vue';
+import DelItemModal from '@/components/admin/DelItemModal.vue';
+import Pagination from '@/components/admin/Pagination.vue';
 
 export default {
   components: {
@@ -113,7 +113,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     openModal(item) {
@@ -137,7 +137,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     updateOrder(item) {
@@ -156,7 +156,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },

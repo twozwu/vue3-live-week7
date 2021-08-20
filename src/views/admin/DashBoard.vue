@@ -36,13 +36,13 @@ export default {
           }
         });
       } else {
-        this.$httpToastMessage(false, '您尚未登入，請重新登入');
+        this.$httpToastMessage(0, '您尚未登入，請重新登入');
         this.$router.push('/login');
       }
     },
     signout() {
       document.cookie = 'hexToken=;expires=;';
-      this.$httpToastMessage(true, 'token 已清除');
+      this.$httpToastMessage(1, '您以登出');
       this.$router.push('/login');
     },
   },

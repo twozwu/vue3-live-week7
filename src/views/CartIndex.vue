@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-3">
+  <div class="mt-3" v-if="carts.total != 0">
     <h3 class="mt-6 mb-4 px-3 border-start border-5 border-chocolate">商品列表</h3>
     <div class="row">
       <div class="col-md table-responsive">
@@ -78,18 +78,13 @@
                 <a
                   href="#"
                   id="tooltip"
-                  class="cart-tooltip"
+                  class="cart-tooltip p-2"
                   @click.prevent="delItem(item.id)"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="刪除商品"
                   ><font-awesome-icon icon="times" class="fas fa-times"></font-awesome-icon
                 ></a>
-              </td>
-            </tr>
-            <tr v-if="carts.total == 0" class="text-center">
-              <td colspan="4">
-                <p>購物車為空，請下單完再送出唷~</p>
               </td>
             </tr>
             <tr class="bg-custom">
@@ -140,7 +135,7 @@
                 <a
                   href="#"
                   id="tooltip"
-                  class="cart-tooltip position-relative"
+                  class="cart-tooltip position-relative p-2"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="清空購物車"
@@ -177,6 +172,19 @@
       </div>
     </div>
   </div>
+  <div
+    class="d-flex flex-column justify-content-center align-items-center mt-7"
+    v-if="carts.total == 0"
+  >
+    <img
+      src="http://pic.616pic.com/ys_b_img/00/09/39/Ls8lTFMQiU.jpg"
+      alt=""
+      class="img-fluid rounded-circle"
+    />
+    <p class="fs-3 my-5">
+      購物車為空，請再逛逛或參考下方推薦商品唷~
+    </p>
+  </div>
   <div class="container mt-5">
     <h3 class="mb-4 px-3 border-start border-5 border-chocolate">熱銷商品</h3>
     <Swiper-products :products="products" :column="4"></Swiper-products>
@@ -185,7 +193,6 @@
 
 <script>
 import SwiperProducts from '@/components/SwiperProducts.vue';
-import Tooltip from 'bootstrap/js/dist/tooltip';
 
 const shuffle = require('lodash.shuffle');
 
@@ -233,7 +240,7 @@ export default {
         })
         .catch((error) => {
           this.loadingStatus = '';
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     clearCart() {
@@ -253,7 +260,7 @@ export default {
         })
         .catch((error) => {
           this.loadingStatus = '';
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     delItem(id) {
@@ -272,7 +279,7 @@ export default {
         })
         .catch((error) => {
           this.loadingStatus = '';
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     getData() {
@@ -290,7 +297,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     couponOn() {
@@ -311,7 +318,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },
@@ -328,12 +335,6 @@ export default {
   mounted() {
     this.getCart();
     this.getData();
-  },
-  updated() {
-    const tooltipTriggerList = [].slice.call(
-      document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-    );
-    this.tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => new Tooltip(tooltipTriggerEl));
   },
 };
 </script>

@@ -56,8 +56,8 @@
 </template>
 
 <script>
-import SwiperHeader from '../components/SwiperHeader.vue';
-import Loading from '../components/Loading.vue';
+import SwiperHeader from '@/components/SwiperHeader.vue';
+import Loading from '@/components/Loading.vue';
 
 export default {
   components: { SwiperHeader, Loading },
@@ -100,7 +100,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     addToCart(id, qty = 1) {
@@ -123,7 +123,7 @@ export default {
         })
         .catch((error) => {
           this.loadingStatus = '';
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     favoriteFilter() {
@@ -139,11 +139,11 @@ export default {
       // 判斷是否重複
       if (this.myFavorite.includes(item.id)) {
         this.myFavorite.splice(this.myFavorite.indexOf(item.id), 1);
-        this.$httpToastMessage(false, '移除我的最愛 成功');
+        this.$httpToastMessage(0, '移除我的最愛 成功');
         this.favoriteItems.splice(this.favoriteItems.indexOf(item), 1);
       } else {
         this.myFavorite.push(item.id);
-        this.$httpToastMessage(true, '加入我的最愛 成功');
+        this.$httpToastMessage(1, '加入我的最愛 成功');
       }
       this.favoriteSet(this.myFavorite);
       this.emitter.emit('navFavoriteLength');

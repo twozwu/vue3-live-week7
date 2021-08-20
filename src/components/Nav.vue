@@ -102,11 +102,13 @@
           </h5>
           <div class="d-flex mt-2 bg-light" v-for="(item, index) in carts.carts" :key="item.id">
             <div class="py-3">
-              <img
-                :src="item.product.imageUrl"
-                :alt="item.product.title"
-                style="width: 120px; height: 120px; object-fit: cover;"
-              />
+              <router-link :to="`/detail/${item.product.id}`">
+                <img
+                  :src="item.product.imageUrl"
+                  :alt="item.product.title"
+                  style="width: 120px; height: 120px; object-fit: cover;"
+                />
+              </router-link>
             </div>
             <div class="w-100 p-3 position-relative">
               <a
@@ -239,7 +241,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     updateCart(data, num = data.qty) {
@@ -272,7 +274,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     delItem(id) {
@@ -291,7 +293,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     sendData() {

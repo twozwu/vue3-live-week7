@@ -7,7 +7,7 @@
         <Form ref="form" v-slot="{ errors }" @submit="createOrder">
           <p class="">請輸入聯絡資訊：</p>
           <div class="mb-0">
-            <label for="ContactMail" class="text-muted mb-0"
+            <label for="email" class="text-muted mb-0"
               >信箱<span class="text-danger"> *</span></label
             >
             <Field
@@ -24,7 +24,7 @@
           </div>
           <p class="mt-md-5 mt-4">請輸入寄送資訊：</p>
           <div class="mb-2">
-            <label for="ContactName" class="text-muted mb-0"
+            <label for="name" class="text-muted mb-0"
               >姓名<span class="text-danger"> *</span></label
             >
             <Field
@@ -40,7 +40,7 @@
             <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
           </div>
           <div class="mb-2">
-            <label for="ContactPhone" class="text-muted mb-0"
+            <label for="tel" class="text-muted mb-0"
               >連絡電話<span class="text-danger"> *</span></label
             >
             <Field
@@ -56,7 +56,7 @@
             <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
           </div>
           <div class="mb-2">
-            <label for="ContactPhone" class="text-muted mb-0"
+            <label for="address" class="text-muted mb-0"
               >連絡地址<span class="text-danger"> *</span></label
             >
             <Field
@@ -85,12 +85,13 @@
           <div class="d-block d-md-none border p-4 mb-4 mt-md-0 mt-5">
             <h4 class=" mb-4">我的訂單</h4>
             <div class="d-flex mb-2" v-for="item in carts.carts" :key="item.id">
-              <img
-                :src="item.product.imageUrl"
-                :alt="item.product.title"
-                class="me-2"
-                style="width: 48px; height: 48px; object-fit: cover"
-              />
+              <router-link :to="`/detail/${item.product.id}`"
+                ><img
+                  :src="item.product.imageUrl"
+                  :alt="item.product.title"
+                  class="me-2"
+                  style="width: 48px; height: 48px; object-fit: cover"
+              /></router-link>
               <div class="w-100">
                 <div class="d-flex justify-content-between">
                   <router-link :to="`/detail/${item.product.id}`">
@@ -142,12 +143,14 @@
         <div class="border p-4 mb-4 mt-md-0 mt-5">
           <h4 class=" mb-4">我的訂單</h4>
           <div class="d-flex mb-2" v-for="item in carts.carts" :key="item.id">
-            <img
-              :src="item.product.imageUrl"
-              :alt="item.product.title"
-              class="me-2"
-              style="width: 48px; height: 48px; object-fit: cover"
-            />
+            <router-link :to="`/detail/${item.product.id}`"
+              ><img
+                :src="item.product.imageUrl"
+                :alt="item.product.title"
+                class="me-2"
+                style="width: 48px; height: 48px; object-fit: cover"
+              />
+            </router-link>
             <div class="w-100">
               <div class="d-flex flex-wrap justify-content-between">
                 <router-link :to="`/detail/${item.product.id}`">
@@ -223,7 +226,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },

@@ -72,8 +72,9 @@
             href="https://github.com/twozwu/vue3-live-week7"
             target="_blank"
             class="mb-2 h4 table align-middle"
-            ><i class="fab fa-github text-white"></i></a
-          ><router-link class="btn btn-chocolate" to="/admin/products"></router-link>
+          >
+            <i class="fab fa-github text-white"></i>
+          </a>
           <p class="mb-0">圖片僅為練習使用，無商業用途。</p>
           <p class="mb-0">© 2021 LOGO All Rights Reserved.</p>
         </div>
@@ -86,7 +87,7 @@
 export default {
   methods: {
     toastMessage() {
-      this.$httpToastMessage(true, '感謝您的訂閱，未來將不定時寄送優惠通知');
+      this.$httpToastMessage(1, '感謝您的訂閱，未來將不定時寄送優惠通知');
     },
   },
 };

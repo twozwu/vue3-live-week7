@@ -78,7 +78,7 @@ export default {
     // 偵測視窗大小
     window.onresize = () => {
       this.bodyWidth = window.innerWidth;
-      if (this.bodyWidth <= 768) {
+      if (this.bodyWidth <= 765) {
         this.thisColumn = 1;
         this.direction = 'vertical';
       } else if (this.bodyWidth <= 992) {

@@ -91,7 +91,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     openModal(isNew, item) {
@@ -125,7 +125,7 @@ export default {
           })
           .catch((error) => {
             this.emitter.emit('isLoading', false);
-            this.$httpToastMessage(false, error);
+            this.$httpToastMessage(0, error);
           });
       } else {
         const url = `${this.apiUrl}/api/${this.apiPath}/admin/coupon/${this.tempCoupon.id}`;
@@ -143,7 +143,7 @@ export default {
           })
           .catch((error) => {
             this.emitter.emit('isLoading', false);
-            this.$httpToastMessage(false, error);
+            this.$httpToastMessage(0, error);
           });
       }
     },
@@ -165,7 +165,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },

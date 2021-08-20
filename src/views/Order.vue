@@ -156,13 +156,13 @@ export default {
           if (res.data.success && res.data.order) {
             this.order = res.data.order;
           } else {
-            this.$httpToastMessage(false, '查無此訂單');
+            this.$httpToastMessage(0, '查無此訂單');
           }
           this.emitter.emit('isLoading', false);
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     checkout() {
@@ -181,7 +181,7 @@ export default {
         })
         .catch((error) => {
           this.emitter.emit('isLoading', false);
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     copyOrderID() {

@@ -2,52 +2,6 @@
   <loading :active="isLoading"></loading>
   <swiper-header class="mb-5"></swiper-header>
   <div class="category container text-center">
-    <!-- <nav
-      class="nav flex-column flex-sm-row fs-5 fs-sm-6 mb-3 border border-chocolate border-center
-      rounded-3 bg-chocolate text-white"
-    >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        aria-current="page"
-        href="#"
-        :class="{ active: isActive === 'all' }"
-        @click.prevent="filter('all')"
-        >全部產品</a
-      >
-      <a
-        class="flex-sm-fill text-center nav-link"
-        href="#"
-        :class="{ active: isActive === 'dark' }"
-        aria-current="page"
-        @click.prevent="filter('dark')"
-        >黑巧克力</a
-      >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        href="#"
-        :class="{ active: isActive === 'cookie' }"
-        @click.prevent="filter('cookie')"
-        >餅乾</a
-      >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        href="#"
-        tabindex="-1"
-        aria-disabled="true"
-        :class="{ active: isActive === 'cake' }"
-        @click.prevent="filter('cake')"
-        >蛋糕</a
-      >
-      <a
-        class="flex-sm-fill text-sm-center nav-link"
-        href="#"
-        tabindex="-1"
-        aria-disabled="true"
-        :class="{ active: isActive === 'drink' }"
-        @click.prevent="filter('drink')"
-        >飲料</a
-      >
-    </nav>-->
     <!-- 商品頁籤 -->
     <ul
       class="menu nav justify-content-around
@@ -137,7 +91,11 @@
               <router-link class="col-5 btn btn-outline-chocolate" :to="`/detail/${item.id}`"
                 >詳細資料</router-link
               >
-              <button class="col-5 px-md-1 btn btn-chocolight" @click="addToCart(item.id)">
+              <button
+                class="col-5 px-md-1 btn btn-chocolight"
+                @click="addToCart(item.id)"
+                :disabled="loadingStatus == item.id"
+              >
                 <font-awesome-icon
                   icon="spinner"
                   pulse
@@ -155,8 +113,8 @@
 </template>
 
 <script>
-import SwiperHeader from '../components/SwiperHeader.vue';
-import Loading from '../components/Loading.vue';
+import SwiperHeader from '@/components/SwiperHeader.vue';
+import Loading from '@/components/Loading.vue';
 
 const favoriteMethods = {
   save(favorite) {
@@ -199,7 +157,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     addToCart(id, qty = 1) {
@@ -222,7 +180,7 @@ export default {
         })
         .catch((error) => {
           this.loadingStatus = '';
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
     filter(category = 'all') {
@@ -239,10 +197,10 @@ export default {
       // 判斷是否重複
       if (this.myFavorite.includes(item.id)) {
         this.myFavorite.splice(this.myFavorite.indexOf(item.id), 1);
-        this.$httpToastMessage(false, '移除我的最愛 成功');
+        this.$httpToastMessage(0, '移除我的最愛 成功');
       } else {
         this.myFavorite.push(item.id);
-        this.$httpToastMessage(true, '加入我的最愛 成功');
+        this.$httpToastMessage(1, '加入我的最愛 成功');
       }
       favoriteMethods.save(this.myFavorite);
       this.emitter.emit('navFavoriteLength');

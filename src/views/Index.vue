@@ -5,14 +5,13 @@
       <h3 class="row  justify-content-center text-white pb-5 fs-4 fs-md-3">
         疲勞了嗎?休息一下，伸個懶腰，來顆精氣神巧克力吧!!
       </h3>
-      <div class=""></div>
     </div>
   </div>
   <div class="container bg-opcity">
     <h3 class="border-start border-5 px-3 border-chocolate">熱門商品</h3>
     <swiper-products class="text-center" :products="products" :column="3"></swiper-products>
   </div>
-  <div class="bg-light mt-3 section-bg">
+  <div class="bg-light mt-lg-3 section-bg">
     <div class="container">
       <div class="row justify-content-center py-6">
         <div class="col-md-6 text-center text-light">
@@ -28,7 +27,7 @@
   </div>
   <div class="container mt-5">
     <h3 class="border-start border-bottom border-5 px-3 border-chocolate">黑巧克力系列</h3>
-    <div class="row">
+    <div class="row g-0">
       <div class="col-7">
         <img
           class="w-100 fit"
@@ -36,20 +35,20 @@
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black hover-center shadow-lg">
+        <div class="position-md-absolute position-black shadow-lg">
           <h4 class="text-chocolate fw-bold">純黑巧克力</h4>
           <p>有多種口味</p>
           <ul>
-            <li class="">純黑100%巧克力</li>
-            <li class="">純黑80%巧克力</li>
-            <li class="">純黑牛奶巧克力</li>
-            <li class="">純黑微辣巧克力</li>
-            <li class="">純黑果仁巧克力</li>
+            <li>純黑100%巧克力</li>
+            <li>純黑80%巧克力</li>
+            <li>純黑牛奶巧克力</li>
+            <li>純黑微辣巧克力</li>
+            <li>純黑果仁巧克力</li>
           </ul>
-          <div class="row justify-content-end">
+          <div class="text-end">
             <router-link
               :to="{ path: '/products', query: { category: 'dark' } }"
-              class="btn btn-chocolight w-100 w-md-25"
+              class="btn btn-chocolight w-100 w-md-50"
               >前往購物</router-link
             >
           </div>
@@ -59,7 +58,7 @@
     <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate">
       餅乾系列
     </h3>
-    <div class="row flex-row-reverse">
+    <div class="row flex-row-reverse g-0">
       <div class="col-7">
         <img
           class="w-100 fit"
@@ -67,20 +66,20 @@
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black-r hover-center shadow-lg">
+        <div class="position-md-absolute position-black-r shadow-lg">
           <h4 class="text-chocolate fw-bold">餅乾系列</h4>
           <p>有多種口味</p>
           <ul>
-            <li class="">卡布奇諾風味手指餅</li>
-            <li class="">巧克力手工餅乾(白)</li>
-            <li class="">巧克力手工餅乾(黑)</li>
-            <li class="">巧克力夾心餅乾</li>
-            <li class="">卡哇依愛心巧克力薄餅</li>
+            <li>卡布奇諾風味手指餅</li>
+            <li>巧克力手工餅乾(白)</li>
+            <li>巧克力手工餅乾(黑)</li>
+            <li>巧克力夾心餅乾</li>
+            <li>卡哇依愛心巧克力薄餅</li>
           </ul>
-          <div class="d-flex justify-content-end">
+          <div class="text-end">
             <router-link
               :to="{ path: '/products', query: { category: 'cookie' } }"
-              class="btn btn-chocolight w-100 w-md-25"
+              class="btn btn-chocolight w-100 w-md-50"
               >前往購物</router-link
             >
           </div>
@@ -88,7 +87,7 @@
       </div>
     </div>
     <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate">蛋糕系列</h3>
-    <div class="row">
+    <div class="row g-0">
       <div class="col-7">
         <img
           class="w-100 fit"
@@ -96,20 +95,20 @@
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black hover-center shadow-lg">
+        <div class="position-md-absolute position-black shadow-lg">
           <h4 class="text-chocolate fw-bold">蛋糕系列</h4>
           <p>有多種口味</p>
           <ul>
-            <li class="">巧克力慕斯蛋糕</li>
-            <li class="">香草巧克力蛋糕</li>
-            <li class="">濃巧克力蛋糕</li>
-            <li class="">巧克力磅蛋糕</li>
-            <li class="">巧克力奶油捲</li>
+            <li>巧克力慕斯蛋糕</li>
+            <li>香草巧克力蛋糕</li>
+            <li>濃巧克力蛋糕</li>
+            <li>巧克力磅蛋糕</li>
+            <li>巧克力奶油捲</li>
           </ul>
-          <div class="row justify-content-end">
+          <div class="text-end">
             <router-link
               :to="{ path: '/products', query: { category: 'cake' } }"
-              class="btn btn-chocolight w-100 w-md-25"
+              class="btn btn-chocolight w-100 w-md-50"
               >前往購物</router-link
             >
           </div>
@@ -119,7 +118,7 @@
     <h3 class="border-start border-bottom border-5 px-3 mt-5 border-chocolate">
       飲料系列
     </h3>
-    <div class="row flex-row-reverse">
+    <div class="row flex-row-reverse g-0">
       <div class="col-7">
         <img
           class="w-100 fit"
@@ -127,20 +126,20 @@
         />
       </div>
       <div class="col-5 position-relative">
-        <div class="position-absolute position-black-r hover-center shadow-lg">
+        <div class="position-md-absolute position-black-r shadow-lg">
           <h4 class="text-chocolate fw-bold">飲料系列</h4>
           <p>有多種口味</p>
           <ul>
-            <li class="">棉花糖可可</li>
-            <li class="">濃情巧可力</li>
-            <li class="">巧克力拿鐵</li>
-            <li class="">可可冰沙</li>
-            <li class="">熱可可( 冬季限定 )</li>
+            <li>棉花糖可可</li>
+            <li>濃情巧可力</li>
+            <li>巧克力拿鐵</li>
+            <li>可可冰沙</li>
+            <li>熱可可( 冬季限定 )</li>
           </ul>
-          <div class="row justify-content-end">
+          <div class="text-end">
             <router-link
               :to="{ path: '/products', query: { category: 'drink' } }"
-              class="btn btn-chocolight w-100 w-md-25"
+              class="btn btn-chocolight w-100 w-md-50"
               >前往購物</router-link
             >
           </div>
@@ -151,7 +150,7 @@
 </template>
 
 <script>
-import SwiperProducts from '../components/SwiperProducts.vue';
+import SwiperProducts from '@/components/SwiperProducts.vue';
 
 const shuffle = require('lodash.shuffle');
 
@@ -176,7 +175,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.$httpToastMessage(false, error);
+          this.$httpToastMessage(0, error);
         });
     },
   },
@@ -218,27 +217,18 @@ export default {
   background: #fde2e2e1;
 }
 @media (max-width: 576px) {
-  .position-black {
-    padding: 20px 10px;
-    left: -50px;
-  }
+  .position-black,
   .position-black-r {
-    padding: 20px 10px;
-    right: -50px;
+    padding: 10px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
   }
 }
 .fit {
   object-fit: cover;
   height: 400px;
-}
-.hover-center {
-  h4 {
-    transition: transform 0.5s;
-  }
-  &:hover {
-    h4 {
-      transform: translateX(40%);
-    }
-  }
 }
 </style>
